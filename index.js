@@ -16,6 +16,11 @@ game.getContext("2d");
 
 const ctx = game.getContext("2d");
 
+let sliderZ;
+
+z_slider.addEventListener("input", () => {
+  sliderZ = Number(z_slider.value);
+});
 
 function clear(){
   ctx.fillStyle = BACKGROUND;
@@ -69,82 +74,192 @@ function rotated_circle(){
 }
 
 function rotatedCircle() {
-  try{
-    ctx.strokeStyle = ENTITY;
-    ctx.lineWidth = 5;
-    const angle = 30 + 7*dz;
+  ctx.strokeStyle = ENTITY;
+  ctx.lineWidth = 5;
+  const angle = 30 + 7*dz;
 
-    if(angle == 0) return;
+  if(angle == 0) return;
 
-    console.log(angle)
-    ctx.save();
-    ctx.translate(150, 150);
-    ctx.rotate(angle * Math.PI / 180);
-    ctx.beginPath();
-    ctx.ellipse(0, 0, 50, Math.abs( Math.cos(angle * Math.PI / 180)), 0, 0, Math.PI * 2);
-    //CanvasPath.ellipse(x: number, y: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, counterclockwise?: boolean): void
-    ctx.stroke();
-    
-    ctx.restore();
-  }
-  catch(er){
-    console.log(er);
-  }
-}
-
-function degreeToRad(angle){
-  return angle * Math.PI / 180;
-}
-
-function rote(x, y, angleX, angleY) {
-  const radius = 50;
-
-  try{
-    ctx.strokeStyle = ENTITY;
-    ctx.lineWidth = 5;
-    const angle = 30 + 7*dz;
-
-    if(angle == 0) return;
-
-    console.log(angle)
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(angle * Math.PI / 180);
-    ctx.beginPath();
-    ctx.ellipse(0, 0, radius * Math.abs(Math.cos(degreeToRad(angleX))), radius * Math.abs(Math.cos(degreeToRad(angleY))), 0, 0, Math.PI * 2);
-    ctx.stroke();
-    
-    ctx.restore();
-  }
-  catch(er){
-    console.log(er);
-  }
+  ctx.save();
+  ctx.translate(150, 150);
+  ctx.rotate(angle * Math.PI / 180);
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 50, Math.abs( Math.cos(angle * Math.PI / 180)), 0, 0, Math.PI * 2);
+  //CanvasPath.ellipse(x: number, y: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, counterclockwise?: boolean): void
+  ctx.stroke();
+  
+  ctx.restore();
 }
 
 console.log(ctx);
 
+function translate_z({x, y, z}, dz){
+  return {x, y, z: z+dz};
+}
+
+/*
+function degreeToRad(angle){
+  return angle * Math.PI / 180;
+}
+*/
+
+function rotate_xz({x, y, z}, angle){
+  const c = Math.cos(degreeToRad(angle));
+  const s = Math.sin(degreeToRad(angle));
+
+  return {
+    x: x*c - z*s,
+    y: y,
+    z: x*c + z*s,
+  }
+}
+
+/*
+const vertices = [
+  {x: 0.5, y: 0.5, z: 0.75},
+  {x: -0.5, y: 0.5, z: 0.75},
+  {x: 0.5, y: -0.5, z: 0.75},
+  {x: -0.5, y: -0.5, z: 0.75},
+
+  {x: 0.5, y: 0.5, z: 0.25},
+  {x: -0.5, y: 0.5, z: 0.25},
+  {x: 0.5, y: -0.5, z: 0.25},
+  {x: -0.5, y: -0.5, z: 0.25},
+];
+*/
+
+/*
+const vertices = [
+  {x: 0.5, y: 0.5, z: 0.25},
+  {x: -0.5, y: 0.5, z: 0.25},
+  {x: 0.5, y: -0.5, z: 0.25},
+  {x: -0.5, y: -0.5, z: 0.25},
+
+  {x: 0.5, y: 0.5, z: -0.25},
+  {x: -0.5, y: 0.5, z: -0.25},
+  {x: 0.5, y: -0.5, z: -0.25},
+  {x: -0.5, y: -0.5, z: -0.25},
+];
+*/
+
+const vertices = [
+  {x: 0.25, y: 0.25, z: 0.25},
+  {x: -0.25, y: 0.25, z: 0.25},
+  {x: 0.25, y: -0.25, z: 0.25},
+  {x: -0.25, y: -0.25, z: 0.25},
+
+  {x: 0.25, y: 0.25, z: -0.25},
+  {x: -0.25, y: 0.25, z: -0.25},
+  {x: 0.25, y: -0.25, z: -0.25},
+  {x: -0.25, y: -0.25, z: -0.25},
+];
+
+/*
+const faces = [
+  [0, 1, 2, 3],
+  [4, 5, 6, 7],
+  [0, 4],
+  [1, 5],
+  [2, 6],
+  [3, 7],
+]
+*/
+
+const faces = [
+  [2, 0, 1, 3],
+  [6, 4, 5, 7],
+  [0, 4],
+  [1, 5],
+  [2, 6],
+  [3, 7],
+]
+
+function line(p1, p2){
+  ctx.save();
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = FOREGROUND;
+  ctx.beginPath();
+  ctx.moveTo(p1.x, p1.y);
+  ctx.lineTo(p2.x, p2.y);
+  ctx.stroke();
+  ctx.restore();
+}
+
+const extras = [];
+function squareFace(z){
+  if(extras.length == 0){
+    const n=20;
+    const inicio=-0.5;
+    const fim=0.5;
+    const acrescimo = (fim-inicio)/n;
+
+    for(let i=0; i<=20; i++){
+      extras.push({x: inicio+acrescimo*i, y: inicio, z});
+      extras.push({x: inicio+acrescimo*i, y: fim, z});
+      extras.push({y: inicio+acrescimo*i, x: inicio, z});
+      extras.push({y: inicio+acrescimo*i, x: fim, z});
+    }
+  }
+  return extras;
+}
+
 function frame(){
   const dt = 1/FPS;
 
-  dz += 6*dt;
+  dz += dt;
+  const angle = 2*Math.PI*dt;
+
+  
 
   clear();
-  point(screen(project({x: 0, y:0, z:1+dz})));
-  point(screen(project({x: 0.25, y:1, z:1+dz})));
-  
-  circle(150, 150);
-  rote(150, 150, 0, dz);
+  //point(screen(project({x: 0, y:0, z:1+dz})));
+  //point(screen(project({x: 0.25, y:1, z:1+dz})));
+  //algunsMovimentos(dz);
 
-  circle(400, 400);
-  rote(400, 400, dz, 0);
+  /*
+  for(v of vertices){
+    point(
+      screen(
+        project(
+          translate_z(rotate_xz(v, 30*dz), sliderZ)
+        )
+      )
+    );
+  }
 
-  circle(200, 400);
-  rote(400, 400, dz, 0);
+  for(v of squareFace(0.25)){
+    point(
+      screen(
+        project(
+          translate_z(rotate_xz(v, 30*dz), sliderZ)
+        )
+      )
+    );
+  }
+  */
 
-  circle(400, 100);
-  rote(400, 400, dz, dz);
+  line({x: -100, y: -200}, {x: 200, y: 400});
 
-  //rotatedCircle(dz);
+  for(f of faces){
+    for(let i=0; i<f.length; i++){
+      const a = screen(
+        project(
+          translate_z(rotate_xz(vertices[f[i]], 30*dz), sliderZ)
+        )
+      );
+
+      const b = screen(
+        project(
+          translate_z(rotate_xz(vertices[f[(i+1) % f.length]], 30*dz), sliderZ)
+        )
+      );
+      //console.log(a, b);
+
+      line(a, b);
+    }
+  }
+
+  algunsMovimentos(dz);
 
   setTimeout(frame, 1000/FPS);
 }
