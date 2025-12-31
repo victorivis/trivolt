@@ -104,8 +104,8 @@ function degreeToRad(angle){
 */
 
 function rotate_xz({x, y, z}, angle){
-  const c = Math.cos(degreeToRad(angle));
-  const s = Math.sin(degreeToRad(angle));
+  const c = Math.cos(angle);
+  const s = Math.sin(angle);
 
   return {
     x: x*c - z*s,
@@ -142,16 +142,18 @@ const vertices = [
 ];
 */
 
+const pzs = 0.25;
+const pze = 0.75
 const vertices = [
-  {x: 0.25, y: 0.25, z: 0.25},
-  {x: -0.25, y: 0.25, z: 0.25},
-  {x: 0.25, y: -0.25, z: 0.25},
-  {x: -0.25, y: -0.25, z: 0.25},
+  {x: 0.25, y: 0.25, z: pzs},
+  {x: -0.25, y: 0.25, z: pzs},
+  {x: 0.25, y: -0.25, z: pzs},
+  {x: -0.25, y: -0.25, z: pzs},
 
-  {x: 0.25, y: 0.25, z: -0.25},
-  {x: -0.25, y: 0.25, z: -0.25},
-  {x: 0.25, y: -0.25, z: -0.25},
-  {x: -0.25, y: -0.25, z: -0.25},
+  {x: 0.25, y: 0.25, z: pze},
+  {x: -0.25, y: 0.25, z: pze},
+  {x: 0.25, y: -0.25, z: pze},
+  {x: -0.25, y: -0.25, z: pze},
 ];
 
 /*
@@ -206,8 +208,8 @@ function squareFace(z){
 function frame(){
   const dt = 1/FPS;
 
-  dz += dt;
-  const angle = 2*Math.PI*dt;
+  dz += 0.01;
+  const angle = Math.PI*dz/10;
 
   
 
@@ -244,13 +246,13 @@ function frame(){
     for(let i=0; i<f.length; i++){
       const a = screen(
         project(
-          translate_z(rotate_xz(vertices[f[i]], 30*dz), sliderZ)
+          translate_z(rotate_xz(vertices[f[i]], angle), sliderZ)
         )
       );
 
       const b = screen(
         project(
-          translate_z(rotate_xz(vertices[f[(i+1) % f.length]], 30*dz), sliderZ)
+          translate_z(rotate_xz(vertices[f[(i+1) % f.length]], angle), sliderZ)
         )
       );
       //console.log(a, b);
