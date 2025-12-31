@@ -40,12 +40,12 @@ function project({x, y, z}){
   return {x: x/z, y: y/z};
 }
 
-function circle(){
+function circle(x=150, y=150){
   ctx.strokeStyle = ENTITY;
   ctx.lineWidth = 5;
 
   ctx.beginPath();
-  ctx.arc(150, 150, 50, 0, Math.PI * 2);
+  ctx.arc(x, y, 50, 0, Math.PI * 2);
   ctx.stroke();
 }
 
@@ -72,27 +72,48 @@ function rotatedCircle() {
   try{
     ctx.strokeStyle = ENTITY;
     ctx.lineWidth = 5;
-    const angle = 30 + 5*dz;
+    const angle = 30 + 7*dz;
+
+    if(angle == 0) return;
 
     console.log(angle)
-    
-    // Salvar o estado atual do contexto
     ctx.save();
-    
-    // Mover para a posição do círculo
     ctx.translate(150, 150);
-    
-    // Rotacionar 30 graus (convertendo para radianos)
-    // Para "dentro da tela", rotacionamos em torno do eixo Z
     ctx.rotate(angle * Math.PI / 180);
-    
-    // Desenhar uma elipse (círculo rotacionado aparece como elipse em perspectiva)
-    // A altura da elipse diminui para simular rotação 3D
     ctx.beginPath();
-    ctx.ellipse(0, 0, 50, 50 * Math.cos(angle * Math.PI / 180), 0, 0, Math.PI * 2);
+    ctx.ellipse(0, 0, 50, Math.abs( Math.cos(angle * Math.PI / 180)), 0, 0, Math.PI * 2);
+    //CanvasPath.ellipse(x: number, y: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, counterclockwise?: boolean): void
     ctx.stroke();
     
-    // Restaurar o estado do contexto
+    ctx.restore();
+  }
+  catch(er){
+    console.log(er);
+  }
+}
+
+function degreeToRad(angle){
+  return angle * Math.PI / 180;
+}
+
+function rote(x, y, angleX, angleY) {
+  const radius = 50;
+
+  try{
+    ctx.strokeStyle = ENTITY;
+    ctx.lineWidth = 5;
+    const angle = 30 + 7*dz;
+
+    if(angle == 0) return;
+
+    console.log(angle)
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle * Math.PI / 180);
+    ctx.beginPath();
+    ctx.ellipse(0, 0, radius * Math.abs(Math.cos(degreeToRad(angleX))), radius * Math.abs(Math.cos(degreeToRad(angleY))), 0, 0, Math.PI * 2);
+    ctx.stroke();
+    
     ctx.restore();
   }
   catch(er){
@@ -105,13 +126,25 @@ console.log(ctx);
 function frame(){
   const dt = 1/FPS;
 
-  dz += dt;
+  dz += 6*dt;
 
   clear();
   point(screen(project({x: 0, y:0, z:1+dz})));
   point(screen(project({x: 0.25, y:1, z:1+dz})));
-  circle();
-  rotatedCircle(dz);
+  
+  circle(150, 150);
+  rote(150, 150, 0, dz);
+
+  circle(400, 400);
+  rote(400, 400, dz, 0);
+
+  circle(200, 400);
+  rote(400, 400, dz, 0);
+
+  circle(400, 100);
+  rote(400, 400, dz, dz);
+
+  //rotatedCircle(dz);
 
   setTimeout(frame, 1000/FPS);
 }
