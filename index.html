@@ -1,28 +1,34 @@
-<input
-  type="range"
-  id="z_slider"
-  min="0"
-  max="100"
-  step="0.1"
-  value="2"
-/>
-<canvas id="game"></canvas>
-<script src="circles.js"></script>
-<script src="index.js" defer></script>
-<input
-  type="range"
-  id="rounding"
-  min="0"
-  max="2000"
-  step="0.5"
-  value="2"
-/>
+<head>
+  <script src="index.js" defer></script>
+  <script src="funny.js"></script>
+  <script src="circles.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
 
-<input
-  type="range"
-  id="outro"
-  min="-2"
-  max="2"
-  step="0.1"
-  value="0"
-/>
+<div class="container">
+  <canvas id="game"></canvas>
+
+  <div class="controls">
+    <div class="control-group">
+      <label for="z_slider">Z Depth:</label>
+      <input type="range" id="z_slider" min="0" max="100" step="0.1" value="2" />
+      <span id="z_value">2</span>
+    </div>
+
+    <div class="control-group">
+      <label for="circles">Círculos:</label>
+      <input type="checkbox" id="circles" />
+    </div>
+
+    <div class="control-group">
+      <label for="gradients">Gradientes:</label>
+      <input type="checkbox" id="gradients" />
+    </div>
+
+    <div class="control-group">
+      <label for="rounding">Arredondamento:</label>
+      <input type="range" id="rounding" min="0" max="2000" step="0.5" value="2" />
+      <span id="rounding_value">2</span>
+    </div>
+  </div>
+</div>

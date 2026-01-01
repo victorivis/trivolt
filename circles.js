@@ -11,6 +11,7 @@ function circle(x=150, y=150){
   ctx.stroke();
 }
 
+//CanvasPath.ellipse(x: number, y: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, counterclockwise?: boolean): void
 function circleRotation(x, y, angleX, angleY) {
   const radius = 50;
 
