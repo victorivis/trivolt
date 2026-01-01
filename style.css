@@ -28,7 +28,7 @@ body {
   margin-bottom: 15px;
 }
 
-.control-group label {
+.control-label {
   font-weight: bold;
   display: block;
   margin-bottom: 5px;
@@ -47,3 +47,11 @@ body {
   font-size: 1.1rem;
   font-weight: bold;
 }
+
+/*
+.rotation-controls{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+*/

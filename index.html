@@ -10,25 +10,46 @@
 
   <div class="controls">
     <div class="control-group">
-      <label for="z_slider">Z Depth:</label>
+      <label for="z_slider" class="control-label">Z Depth:</label>
       <input type="range" id="z_slider" min="0" max="100" step="0.1" value="2" />
       <span id="z_value">2</span>
     </div>
 
     <div class="control-group">
-      <label for="circles">Círculos:</label>
+      <label for="circles" class="control-label">Círculos:</label>
       <input type="checkbox" id="circles" />
     </div>
 
     <div class="control-group">
-      <label for="gradients">Gradientes:</label>
+      <label for="gradients" class="control-label">Gradientes:</label>
       <input type="checkbox" id="gradients" />
     </div>
 
     <div class="control-group">
-      <label for="rounding">Arredondamento:</label>
+      <label for="rounding" class="control-label">Arredondamento:</label>
       <input type="range" id="rounding" min="0" max="2000" step="0.5" value="2" />
       <span id="rounding_value">2</span>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Rotação</label>
+
+      <div class="rotation-controls">
+        <div class="control-group">
+          <label for="rotation-x">X</label>
+          <input type="checkbox" id="rotation-x">
+        </div>
+
+        <div class="control-group">
+          <label for="rotation-y">Y</label>
+          <input type="checkbox" id="rotation-y">
+        </div class="control-group">
+
+        <div class="control-group">
+          <label for="rotation-z">Z</label>
+          <input type="checkbox" id="rotation-z">
+        </div>
+      </div>
     </div>
   </div>
 </div>

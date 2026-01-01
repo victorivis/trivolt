@@ -81,6 +81,28 @@ function rotate_xz({x, y, z}, angle){
   }
 }
 
+function rotate_xy({x, y, z}, angle){
+  const c = Math.cos(angle);
+  const s = Math.sin(angle);
+  
+  return {
+    x: x*c - y*s,
+    y: x*s + y*c,
+    z: z,
+  }
+}
+
+function rotate_yz({x, y, z}, angle){
+  const c = Math.cos(angle);
+  const s = Math.sin(angle);
+
+  return {
+    x: x,
+    y: y*c - z*s,
+    z: y*s + z*c,
+  }
+}
+
 const pzs = -0.25;
 const pze = 0.25
 const vertices = [
@@ -118,7 +140,7 @@ function line(p1, p2){
 function globalTransform(p, angle, sliderVal){
   return screen(
     project(
-      translate_z(rotate_xz(p, angle), sliderVal)
+      translate_z(rotate_xz(p, 0), sliderVal)
     )
   );
 }
