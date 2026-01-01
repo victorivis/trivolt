@@ -16,10 +16,10 @@ game.getContext("2d");
 
 const ctx = game.getContext("2d");
 
-let sliderZ;
+let z_slider_val;
 
 z_slider.addEventListener("input", () => {
-  sliderZ = Number(z_slider.value);
+  z_slider_val = Number(z_slider.value);
 });
 
 function clear(){
@@ -142,8 +142,8 @@ const vertices = [
 ];
 */
 
-const pzs = 0.25;
-const pze = 0.75
+const pzs = -0.25;
+const pze = 0.25
 const vertices = [
   {x: 0.25, y: 0.25, z: pzs},
   {x: -0.25, y: 0.25, z: pzs},
@@ -200,16 +200,63 @@ function squareFace(z){
       extras.push({x: inicio+acrescimo*i, y: fim, z});
       extras.push({y: inicio+acrescimo*i, x: inicio, z});
       extras.push({y: inicio+acrescimo*i, x: fim, z});
+
+      //extras.push({x: inicio+acrescimo*i, y: inicio, z: -z});
+      //extras.push({x: inicio+acrescimo*i, y: fim, z: -z});
+      //extras.push({y: inicio+acrescimo*i, x: inicio, z: -z});
+      //extras.push({y: inicio+acrescimo*i, x: fim, z: -z});
     }
   }
   return extras;
+}
+
+const gradient = ctx.createRadialGradient(
+  200, 200, 0,    // x1, y1, r1 (centro, raio interno)
+  200, 200, 200   // x2, y2, r2 (centro, raio externo)
+);
+gradient.addColorStop(0, '#FFA500');
+gradient.addColorStop(1, '#FFFF00');
+
+const triangle = new Path2D();
+triangle.moveTo(100, 100);
+triangle.lineTo(150, 200);
+triangle.lineTo(50, 200);
+triangle.closePath();
+
+function roundedRect(ctx, x, y, width, height, radius) {
+  ctx.save();
+  ctx.fillStyle = gradient;
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+
+  /*
+  ctx.save();
+  ctx.fillStyle = gradient;
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+  */
 }
 
 function frame(){
   const dt = 1/FPS;
 
   dz += 0.01;
-  const angle = Math.PI*dz/10;
+  const angle = -Math.PI*dz*2;
 
   
 
@@ -240,19 +287,42 @@ function frame(){
   }
   */
 
+  /*
+  for(v of vertices){
+    point(
+      screen(
+        project(
+          translate_z(rotate_xz(v, angle), sliderZ)
+        )
+      )
+    );
+  }
+  */
+
+  for(v of squareFace(0.25)){
+    point(
+      screen(
+        project(
+          translate_z(rotate_xz(v, angle), z_slider_val)
+        )
+      )
+    );
+  }
+
   line({x: -100, y: -200}, {x: 200, y: 400});
 
+  
   for(f of faces){
     for(let i=0; i<f.length; i++){
       const a = screen(
         project(
-          translate_z(rotate_xz(vertices[f[i]], angle), sliderZ)
+          translate_z(rotate_xz(vertices[f[i]], angle), z_slider_val)
         )
       );
 
       const b = screen(
         project(
-          translate_z(rotate_xz(vertices[f[(i+1) % f.length]], angle), sliderZ)
+          translate_z(rotate_xz(vertices[f[(i+1) % f.length]], angle), z_slider_val)
         )
       );
       //console.log(a, b);
@@ -260,8 +330,21 @@ function frame(){
       line(a, b);
     }
   }
+  
+  roundedRect(ctx, 200, 200, 200, 200, Number(rounding.value));
 
-  algunsMovimentos(dz);
+  /*
+  // Aplicar gradiente
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 400, 400)
+  */
+
+  // Usar o caminho múltiplas vezes
+  ctx.fillStyle = gradient;
+  ctx.fill(triangle);
+
+  //ctx.translate(1, 0);
+  ctx.setTransform(0.5, Number(outro.value), 0, 0.5, 0, 0);
 
   setTimeout(frame, 1000/FPS);
 }
