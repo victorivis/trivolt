@@ -53,10 +53,10 @@ body {
   justify-content: space-around;
 }
 
-#rotation-label{
+.rotation-label{
   text-align: center;
 }
 
-label[for="rotation-x"], label[for="rotation-y"], label[for="rotation-z"]{
+.rotation-checkbox{
   text-align: center;
 }

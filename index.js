@@ -177,7 +177,7 @@ function displayFaces(edges, vertices, angle){
 function frame(){
   const dt = 1/FPS;
   dz += dt;
-  const angle = dt;
+  const angle = cumulative_speed.checked ? dt : degreeToRad(dt);
 
   clear();
   rbgSquare(ctx);
@@ -197,4 +197,8 @@ function frame(){
   setTimeout(frame, 1000/FPS);
 }
 
-setTimeout(frame, 1000/FPS);
+function init(){
+  setTimeout(frame, 1000/FPS);
+}
+
+init();

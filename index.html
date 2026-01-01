@@ -32,23 +32,37 @@
     </div>
 
     <div class="control-group">
-      <label class="control-label" id="rotation-label">Rotação: </label>
+      <label class="control-label rotation-label">Rotação: </label>
 
       <div class="rotation-controls">
         <div class="control-group">
           <label for="rotation-x" class="control-label">X</label>
-          <input type="checkbox" id="rotation-x">
+          <input type="checkbox" id="rotation-x" class="rotation-checkbox">
         </div>
 
         <div class="control-group">
           <label for="rotation-y" class="control-label">Y</label>
-          <input type="checkbox" id="rotation-y">
+          <input type="checkbox" id="rotation-y" class="rotation-checkbox">
         </div class="control-group">
 
         <div class="control-group">
           <label for="rotation-z" class="control-label">Z</label>
-          <input type="checkbox" id="rotation-z">
+          <input type="checkbox" id="rotation-z" class="rotation-checkbox">
         </div>
+      </div>
+
+      <div class="rotation-controls">
+        <div class="control-group">
+          <label for="rotation-z" class="control-label">Z</label>
+          <input type="checkbox" id="cumulative_speed" class="rotation-checkbox">
+        </div>
+
+        <!--
+        <div class="control-group">
+          <label class="control-label rotation-label">Velocidade Cumulativa: </label>
+          <input type="checkbox" id="cumulative_speed" class="rotation-checkbox">
+        </div>
+        -->
       </div>
     </div>
   </div>
