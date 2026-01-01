@@ -4,6 +4,10 @@ const zValue = document.getElementById('z_value');
 const roundingValue = document.getElementById('rounding_value');
 let zSliderVal = 2;
 
+const rotation_x = document.getElementById('rotation-x');
+const rotation_y = document.getElementById('rotation-y');
+const rotation_z = document.getElementById('rotation-z');
+
 zValue.textContent = zSlider.value;
 zSlider.addEventListener('input', () => {
   zValue.textContent = zSlider.value;
@@ -137,10 +141,25 @@ function line(p1, p2){
   ctx.restore();
 }
 
+let angleX=0, angleY=0, angleZ=0;
 function globalTransform(p, angle, sliderVal){
+  let copyP = {...p};
+
+  if(rotation_x.checked){
+    angleX += angle;
+  }
+  if(rotation_y.checked){
+    angleY += angle;
+  }
+  if(rotation_z.checked){
+    angleZ += angle;
+  }
+
+  copyP = rotate_yz(rotate_xz(rotate_xy(copyP, angleZ), angleY), angleX);
+
   return screen(
     project(
-      translate_z(rotate_xz(p, 0), sliderVal)
+      translate_z(copyP, sliderVal)
     )
   );
 }
@@ -158,7 +177,7 @@ function displayFaces(edges, vertices, angle){
 function frame(){
   const dt = 1/FPS;
   dz += dt;
-  const angle = Math.PI*dz;  
+  const angle = dt;
 
   clear();
   rbgSquare(ctx);

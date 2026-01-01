@@ -48,10 +48,15 @@ body {
   font-weight: bold;
 }
 
-/*
 .rotation-controls{
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  justify-content: space-around;
 }
-*/
+
+#rotation-label{
+  text-align: center;
+}
+
+label[for="rotation-x"], label[for="rotation-y"], label[for="rotation-z"]{
+  text-align: center;
+}
