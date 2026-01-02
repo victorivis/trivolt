@@ -62,3 +62,59 @@ body {
 .rotation-checkbox{
   text-align: center;
 }
+
+.flex{
+  display: flex;
+  flex-direction: row;
+}
+
+.container{
+  display: grid;
+  grid-template-areas: 
+  "um um dois tres"
+  "um um quatro quatro";
+  gap: 10px 20px;
+}
+
+#game{
+  grid-area: um;
+}
+
+#controls{
+  grid-area: dois;
+}
+
+#infos{
+  padding-left: 20px;
+  grid-area: tres;
+}
+
+#files{
+  grid-area: quatro;
+}
+
+.bold{
+  font-weight: bold;
+}
+
+.angles {
+  display: flex;
+  gap: 15px;
+}
+
+.angle-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.angle-label {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.angle-input {
+  width: 70px;
+  text-align: center;
+  font-family: monospace;
+}

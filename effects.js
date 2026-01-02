@@ -25,7 +25,7 @@ function drawGlowingCircle(ctx, x, y, radius=40) {
 
   ctx.beginPath();
   ctx.arc(x, y, radius * 0.4, 0, Math.PI * 2);
-  ctx.fillStyle = gradient;s
+  ctx.fillStyle = gradient;
   ctx.filter = `blur(${blurSize}px) brightness(1.1)`;
   ctx.fill();
   ctx.restore();

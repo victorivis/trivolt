@@ -2,6 +2,7 @@
   <script src="funny.js"></script>
   <script src="circles.js"></script>
   <script src="primitives.js"></script>
+  <script src="effects.js"></script>
   <script src="loader.js" defer></script>
   <script src="index.js" defer></script>
   <link rel="stylesheet" href="style.css">
@@ -10,7 +11,7 @@
 <div class="container">
   <canvas id="game"></canvas>
 
-  <div class="controls">
+  <div class="controls" id="controls">
     <div class="control-group">
       <label for="z_slider" class="control-label">Z Depth:</label>
       <input type="range" id="z_slider" min="0" max="100" step="0.1" value="2" />
@@ -62,7 +63,55 @@
     </div> 
   </div>
 
-  <div>
+  <div id="infos">
+    <label class="control-group bold">Infos</label>
+    
+    <div>
+
+      <label class="control-label">Posições:</label>
+
+      <div class="flex">
+        <div class="control-group">
+          <label for="rotation-z" class="control-label rotation-label">Z</label>
+          <input type="checkbox" id="rotation-z" class="rotation-checkbox">
+        </div>
+
+        <div class="control-group">
+          <label for="rotation-z" class="control-label rotation-label">Z</label>
+          <input type="checkbox" id="rotation-z" class="rotation-checkbox">
+        </div>
+
+        <div class="control-group">
+          <label for="rotation-z" class="control-label rotation-label">Z</label>
+          <input type="checkbox" id="rotation-z" class="rotation-checkbox">
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <label class="control-label">Ângulos (graus):</label>
+
+      <div class="angles">
+        <div class="angle-group">
+          <label class="angle-label">X</label>
+          <input type="number" id="angle-x" class="angle-input" >
+        </div>
+
+        <div class="angle-group">
+          <label class="angle-label">Y</label>
+          <input type="number" id="angle-y" class="angle-input">
+        </div>
+
+        <div class="angle-group">
+          <label class="angle-label">Z</label>
+          <input type="number" id="angle-z" class="angle-input">
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="files">
     <input type="file" id="file-input">
     <div id="file-info"></div>
     <pre id="file-content"></pre>

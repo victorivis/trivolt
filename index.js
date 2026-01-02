@@ -8,6 +8,10 @@ const rotation_x = document.getElementById('rotation-x');
 const rotation_y = document.getElementById('rotation-y');
 const rotation_z = document.getElementById('rotation-z');
 
+const angleXInput = document.getElementById('angle-x');
+const angleYInput = document.getElementById('angle-y');
+const angleZInput = document.getElementById('angle-z');
+
 zValue.textContent = zSlider.value;
 zSlider.addEventListener('input', () => {
   zValue.textContent = zSlider.value;
@@ -17,6 +21,18 @@ zSlider.addEventListener('input', () => {
 roundingValue.textContent = roundingSlider.value;
 roundingSlider.addEventListener('input', () => {
   roundingValue.textContent = roundingSlider.value;
+});
+
+angleXInput.addEventListener('input', ()=>{
+  angleX = Math.PI * Number(angleXInput.value)/180;
+});
+
+angleYInput.addEventListener('input', ()=>{
+  angleY = Math.PI * Number(angleYInput.value)/180;
+});
+
+angleZInput.addEventListener('input', ()=>{
+  angleZ = Math.PI * Number(angleZInput.value)/180;
 });
 
 console.log(game);
@@ -68,6 +84,10 @@ function circle(x, y, radius=50){
 
 function degreeToRad(angle){
   return angle * Math.PI / 180;
+}
+
+function translate({x, y, z}, {dx, dy, dz}){
+  return {x: x+dx, y: y+dy, z: z+dz};
 }
 
 function translate_z({x, y, z}, dz){
@@ -142,6 +162,10 @@ function line(p1, p2){
 }
 
 let angleX=0, angleY=0, angleZ=0;
+let posX=1, posY=1, posZ=1;
+
+const circunference = 2*Math.PI;
+
 function globalTransform(p, angle, sliderVal){
   let copyP = {...p};
 
@@ -155,11 +179,28 @@ function globalTransform(p, angle, sliderVal){
     angleZ += angle;
   }
 
+  if(angleX > 2*Math.PI){
+    angleX = angleX%circunference;
+  }
+  if(angleY > 2*Math.PI){
+    angleY = angleY%circunference;
+  }
+  if(angleZ > 2*Math.PI){
+    angleZ = angleZ%circunference;
+  }
+
+  angleXInput.value = (angleX * 180 / Math.PI).toFixed(2);
+  angleYInput.value = (angleY * 180 / Math.PI).toFixed(2);
+  angleZInput.value = (angleZ * 180 / Math.PI).toFixed(2);
+
   copyP = rotate_yz(rotate_xz(rotate_xy(copyP, angleZ), angleY), angleX);
+  //const translatedP = translate(copyP, {posX, posY, posZ});
+  
+  const temp = translate_z(copyP, sliderVal);
 
   return screen(
     project(
-      translate_z(copyP, sliderVal)
+      temp
     )
   );
 }
@@ -169,12 +210,31 @@ function displayFaces(edges, vertices, angle){
     for(let i=0; i<f.length; i++){
       const a = globalTransform(vertices[f[i]], angle, zSliderVal);
       const b = globalTransform(vertices[f[(i+1)%f.length]], angle, zSliderVal);
+      
+      //console.log(a);
+      
       line(a, b);
     }
   }
 }
 
-const poliedro = new Cubo();
+const poliedro = new Cube(0, 0.5, 0, 0.5);
+
+const lowBro = [
+  new Cube(0, 0, 0, 1),
+  new Cube(2, 0, 0, 1),
+  new Octaedro(0, 2, 0, 1),
+  new Cube(-2, 0, 0, 1),
+  new Cube(0, -2, 0, 1),
+]
+
+const poliedros = [
+  new Polyedra([{x: -2, y: 0, z: 20}, {x: -2, y: 0, z: -20}]),
+  new Polyedra([{x: -1, y: 0, z: 20}, {x: -1, y: 0, z: -20}]),
+  new Polyedra([{x: 0, y: 0, z: 20}, {x: 0, y: 0, z: -20}]),
+  new Polyedra([{x: 1, y: 0, z: 20}, {x: 1, y: 0, z: -20}]),
+  new Polyedra([{x: 2, y: 0, z: 20}, {x: 2, y: 0, z: -20}]),
+];
 
 function frame(){
   const dt = 1/FPS;
@@ -183,12 +243,10 @@ function frame(){
 
   clear();
   rbgSquare(ctx);
-  displayFaces(poliedro.getEdges(), poliedro.getVertices(), angle);
-  //displayFaces(faces, vertices, angle);
-  //for(v of squareFace(0.25)){
-  //  point(globalTransform(v, angle, zSliderVal));
-  //}
-  
+  //displayFaces(poliedro.getEdges(), poliedro.getVertices(), angle);
+  poliedros.forEach(p => displayFaces(p.getEdges(), p.getVertices(), angle));
+  lowBro.forEach(p => displayFaces(p.getEdges(), p.getVertices(), angle));
+
   if(circles.checked){
     algunsMovimentos(dz);
   }
@@ -196,10 +254,13 @@ function frame(){
     Gradient(ctx);
   }
 
+  drawOrbs(ctx, orbs);
   setTimeout(frame, 1000/FPS);
 }
 
 function init(){
+  console.log(poliedros);
+
   setTimeout(frame, 1000/FPS);
 }
 

@@ -1,73 +1,81 @@
-class Octaedro{
-  static vertices = [
-    {x: 0, y: 0, z: 0.5},
-    {x: 0, y: 0, z: -0.5},
-    {x: 0.5, y: 0, z: 0},
-    {x: -0.5, y: 0, z: 0},
-    {x: 0, y: 0.5, z: 0},
-    {x: 0, y: -0.5, z: 0}
-  ];
+class Polyedra{
+  vertices
+  edges
+  center
 
-  static edges = [
-    [0, 2, 4], [0, 4, 3], [0, 3, 5], [0, 5, 2],
-    [1, 4, 2], [1, 3, 4], [1, 5, 3], [1, 2, 5]
-  ];
+  constructor(vertices){
+    if(vertices){
+      this.vertices = vertices;
+      
+      this.edges = [[]];
+      for(let i=0; i<vertices.length; i++){
+        this.edges[0].push(i);
+      }
+    }
+  }
 
   getEdges(){
-    return Octaedro.edges;
+    return this.edges;
   }
 
   getVertices(){
-    return Octaedro.vertices;
-  }
-}
-
-class Cubo{
-  static pzs = -0.25;
-  static pze = 0.25
-  
-  static vertices = [
-    {x: 0.25, y: 0.25, z: Cubo.pzs},
-    {x: -0.25, y: 0.25, z: Cubo.pzs},
-    {x: 0.25, y: -0.25, z: Cubo.pzs},
-    {x: -0.25, y: -0.25, z: Cubo.pzs},
-
-    {x: 0.25, y: 0.25, z: Cubo.pze},
-    {x: -0.25, y: 0.25, z: Cubo.pze},
-    {x: 0.25, y: -0.25, z: Cubo.pze},
-    {x: -0.25, y: -0.25, z: Cubo.pze},
-  ];
-
-  static edges = [
-    [2, 0, 1, 3],
-    [6, 4, 5, 7],
-    [0, 4],
-    [1, 5],
-    [2, 6],
-    [3, 7],
-  ];
-
-  getEdges(){
-    return Cubo.edges;
-  }
-
-  getVertices(){
-    return Cubo.vertices;
+    return this.vertices;
   }
 
   getCenter(){
-    const center = {x:0, y:0, z:0};
-    for(let v of this.getVertices()){
-      center.x += v.x;
-      center.y += v.y;
-      center.z += v.z;
+    return this.center;
+  }
+}
+
+class Octaedro extends Polyedra{
+  constructor(x, y, z, r){
+    super();
+
+    this.center = {x, y, z};
+
+    this.vertices = [];
+
+    for(let i=0; i<2; i++){
+      this.vertices.push({x, y, z: z + (i==0 ? r : -r)});
     }
 
-    center.x = (center.x / this.getVertices().length);
-    center.y = (center.y / this.getVertices().length);
-    center.z = (center.z / this.getVertices().length);
+    for(let i=0; i<2; i++){
+      this.vertices.push({x, y: y + (i==0 ? r : -r), z});
+    }
 
-    console.log(center);
-    return center;
+    for(let i=0; i<2; i++){
+      this.vertices.push({x: x + (i==0 ? r : -r), y, z});
+    }
+
+    this.edges = [
+      [0, 2, 4], [0, 4, 3], [0, 3, 5], [0, 5, 2],
+      [1, 4, 2], [1, 3, 4], [1, 5, 3], [1, 2, 5]
+    ];
+  }
+}
+
+class Cube extends Polyedra{
+  constructor(x, y, z, r){
+    super();
+
+    this.center = {x, y, z};
+
+    this.vertices = [];
+    for(let i=0; i<2; i++){
+      for(let j=0; j<2; j++){
+        for(let k=0; k<2; k++){
+          this.vertices.push({x: x + (i==0 ? r : -r), y: y + (j==0 ? r : -r), z: z + (k==0 ? r : -r)});
+        }
+      }
+    }
+
+    this.edges = [
+      [2, 0, 1, 3],
+      [6, 4, 5, 7],
+      [0, 4],
+      [1, 5],
+      [2, 6],
+      [3, 7],
+    ];
   }
 }
