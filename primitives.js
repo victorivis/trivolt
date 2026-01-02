@@ -1,14 +1,11 @@
-// Octaedro (8 faces triangulares)
-
-
 class Octaedro{
   static vertices = [
-    {x: 0, y: 0, z: 0.5},    // 0 - topo
-    {x: 0, y: 0, z: -0.5},   // 1 - base
-    {x: 0.5, y: 0, z: 0},    // 2 - direita
-    {x: -0.5, y: 0, z: 0},   // 3 - esquerda
-    {x: 0, y: 0.5, z: 0},    // 4 - frontal
-    {x: 0, y: -0.5, z: 0}    // 5 - traseira
+    {x: 0, y: 0, z: 0.5},
+    {x: 0, y: 0, z: -0.5},
+    {x: 0.5, y: 0, z: 0},
+    {x: -0.5, y: 0, z: 0},
+    {x: 0, y: 0.5, z: 0},
+    {x: 0, y: -0.5, z: 0}
   ];
 
   static edges = [
@@ -17,28 +14,28 @@ class Octaedro{
   ];
 
   getEdges(){
-    return edges;
+    return Octaedro.edges;
   }
 
   getVertices(){
-    return vertices;
+    return Octaedro.vertices;
   }
 }
 
 class Cubo{
-  #pzs = -0.25;
-  #pze = 0.25
+  static pzs = -0.25;
+  static pze = 0.25
   
   static vertices = [
-    {x: 0.25, y: 0.25, z: pzs},
-    {x: -0.25, y: 0.25, z: pzs},
-    {x: 0.25, y: -0.25, z: pzs},
-    {x: -0.25, y: -0.25, z: pzs},
+    {x: 0.25, y: 0.25, z: Cubo.pzs},
+    {x: -0.25, y: 0.25, z: Cubo.pzs},
+    {x: 0.25, y: -0.25, z: Cubo.pzs},
+    {x: -0.25, y: -0.25, z: Cubo.pzs},
 
-    {x: 0.25, y: 0.25, z: pze},
-    {x: -0.25, y: 0.25, z: pze},
-    {x: 0.25, y: -0.25, z: pze},
-    {x: -0.25, y: -0.25, z: pze},
+    {x: 0.25, y: 0.25, z: Cubo.pze},
+    {x: -0.25, y: 0.25, z: Cubo.pze},
+    {x: 0.25, y: -0.25, z: Cubo.pze},
+    {x: -0.25, y: -0.25, z: Cubo.pze},
   ];
 
   static edges = [
@@ -51,10 +48,26 @@ class Cubo{
   ];
 
   getEdges(){
-    return edges;
+    return Cubo.edges;
   }
 
   getVertices(){
-    return vertices;
+    return Cubo.vertices;
+  }
+
+  getCenter(){
+    const center = {x:0, y:0, z:0};
+    for(let v of this.getVertices()){
+      center.x += v.x;
+      center.y += v.y;
+      center.z += v.z;
+    }
+
+    center.x = (center.x / this.getVertices().length);
+    center.y = (center.y / this.getVertices().length);
+    center.z = (center.z / this.getVertices().length);
+
+    console.log(center);
+    return center;
   }
 }

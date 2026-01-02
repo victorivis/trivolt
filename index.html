@@ -1,7 +1,9 @@
 <head>
-  <script src="index.js" defer></script>
   <script src="funny.js"></script>
   <script src="circles.js"></script>
+  <script src="primitives.js"></script>
+  <script src="loader.js" defer></script>
+  <script src="index.js" defer></script>
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -36,34 +38,33 @@
 
       <div class="rotation-controls">
         <div class="control-group">
-          <label for="rotation-x" class="control-label">X</label>
+          <label for="rotation-x" class="control-label rotation-label">X</label>
           <input type="checkbox" id="rotation-x" class="rotation-checkbox">
         </div>
 
         <div class="control-group">
-          <label for="rotation-y" class="control-label">Y</label>
-          <input type="checkbox" id="rotation-y" class="rotation-checkbox">
+          <label for="rotation-y" class="control-label rotation-label">Y</label>
+          <input type="checkbox" id="rotation-y" class="rotation-checkbox" checked>
         </div class="control-group">
 
         <div class="control-group">
-          <label for="rotation-z" class="control-label">Z</label>
+          <label for="rotation-z" class="control-label rotation-label">Z</label>
           <input type="checkbox" id="rotation-z" class="rotation-checkbox">
         </div>
       </div>
 
-      <div class="rotation-controls">
+      <div class="rotation-controls">        
         <div class="control-group">
-          <label for="rotation-z" class="control-label">Z</label>
+          <label class="control-label rotation-label">V <!--elocidade Cumulativa: --> </label>
           <input type="checkbox" id="cumulative_speed" class="rotation-checkbox">
         </div>
-
-        <!--
-        <div class="control-group">
-          <label class="control-label rotation-label">Velocidade Cumulativa: </label>
-          <input type="checkbox" id="cumulative_speed" class="rotation-checkbox">
-        </div>
-        -->
       </div>
-    </div>
+    </div> 
+  </div>
+
+  <div>
+    <input type="file" id="file-input">
+    <div id="file-info"></div>
+    <pre id="file-content"></pre>
   </div>
 </div>

@@ -26,6 +26,8 @@ body {
 
 .control-group {
   margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
 }
 
 .control-label {

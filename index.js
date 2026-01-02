@@ -174,6 +174,8 @@ function displayFaces(edges, vertices, angle){
   }
 }
 
+const poliedro = new Cubo();
+
 function frame(){
   const dt = 1/FPS;
   dz += dt;
@@ -181,11 +183,11 @@ function frame(){
 
   clear();
   rbgSquare(ctx);
-  displayFaces(faces, vertices, angle);
-
-  for(v of squareFace(0.25)){
-    point(globalTransform(v, angle, zSliderVal));
-  }
+  displayFaces(poliedro.getEdges(), poliedro.getVertices(), angle);
+  //displayFaces(faces, vertices, angle);
+  //for(v of squareFace(0.25)){
+  //  point(globalTransform(v, angle, zSliderVal));
+  //}
   
   if(circles.checked){
     algunsMovimentos(dz);
