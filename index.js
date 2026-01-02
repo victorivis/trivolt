@@ -12,6 +12,10 @@ const angleXInput = document.getElementById('angle-x');
 const angleYInput = document.getElementById('angle-y');
 const angleZInput = document.getElementById('angle-z');
 
+const posXInput = document.getElementById('pos-x');
+const posYInput = document.getElementById('pos-y');
+const posZInput = document.getElementById('pos-z');
+
 zValue.textContent = zSlider.value;
 zSlider.addEventListener('input', () => {
   zValue.textContent = zSlider.value;
@@ -34,6 +38,19 @@ angleYInput.addEventListener('input', ()=>{
 angleZInput.addEventListener('input', ()=>{
   angleZ = Math.PI * Number(angleZInput.value)/180;
 });
+
+posXInput.addEventListener('input', () => {
+  posX = Number(posXInput.value);
+});
+
+posYInput.addEventListener('input', () => {
+  posY = Number(posYInput.value);
+});
+
+posZInput.addEventListener('input', () => {
+  posZ = Number(posZInput.value);
+});
+
 
 console.log(game);
 
@@ -162,7 +179,7 @@ function line(p1, p2){
 }
 
 let angleX=0, angleY=0, angleZ=0;
-let posX=1, posY=1, posZ=1;
+let posX=0, posY=0, posZ=6;
 
 const circunference = 2*Math.PI;
 
@@ -194,13 +211,13 @@ function globalTransform(p, angle, sliderVal){
   angleZInput.value = (angleZ * 180 / Math.PI).toFixed(2);
 
   copyP = rotate_yz(rotate_xz(rotate_xy(copyP, angleZ), angleY), angleX);
-  //const translatedP = translate(copyP, {posX, posY, posZ});
-  
-  const temp = translate_z(copyP, sliderVal);
+  const translatedP = translate(copyP, {dx: posX, dy: posY, dz: posZ});
+  //const translatedP = translate_z(copyP, sliderVal);
+  //console.log(translatedP);
 
   return screen(
     project(
-      temp
+      translatedP
     )
   );
 }
