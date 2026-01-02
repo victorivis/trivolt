@@ -1,12 +1,9 @@
-const zSlider = document.getElementById('z_slider');
 const roundingSlider = document.getElementById('rounding');
-const zValue = document.getElementById('z_value');
 const roundingValue = document.getElementById('rounding_value');
-let zSliderVal = 2;
 
-const rotation_x = document.getElementById('rotation-x');
-const rotation_y = document.getElementById('rotation-y');
-const rotation_z = document.getElementById('rotation-z');
+const rotationX = document.getElementById('rotation-x');
+const rotationY = document.getElementById('rotation-y');
+const rotationZ = document.getElementById('rotation-z');
 
 const angleXInput = document.getElementById('angle-x');
 const angleYInput = document.getElementById('angle-y');
@@ -16,11 +13,13 @@ const posXInput = document.getElementById('pos-x');
 const posYInput = document.getElementById('pos-y');
 const posZInput = document.getElementById('pos-z');
 
-zValue.textContent = zSlider.value;
-zSlider.addEventListener('input', () => {
-  zValue.textContent = zSlider.value;
-  zSliderVal = Number(zSlider.value);
-});
+const posXSlider = document.getElementById('pos-x-slider');
+const posYSlider = document.getElementById('pos-y-slider');
+const posZSlider = document.getElementById('pos-z-slider');
+
+const angleXSlider = document.getElementById('angle-x-slider');
+const angleYSlider = document.getElementById('angle-y-slider');
+const angleZSlider = document.getElementById('angle-z-slider');
 
 roundingValue.textContent = roundingSlider.value;
 roundingSlider.addEventListener('input', () => {
@@ -39,18 +38,105 @@ angleZInput.addEventListener('input', ()=>{
   angleZ = Math.PI * Number(angleZInput.value)/180;
 });
 
+let angleX=0, angleY=0, angleZ=0;
+let posX=0, posY=0, posZ=6;
+
+function syncPosInputs() {
+  posXInput.value = posX;
+  posYInput.value = posY;
+  posZInput.value = posZ;
+
+  posXSlider.value = posX;
+  posYSlider.value = posY;
+  posZSlider.value = posZ;
+}
+
+syncPosInputs();
+
+function syncAngleInputs() {
+  angleXInput.value = (angleX * 180 / Math.PI).toFixed(2);
+  angleYInput.value = (angleY * 180 / Math.PI).toFixed(2);
+  angleZInput.value = (angleZ * 180 / Math.PI).toFixed(2);
+
+  angleXSlider.value = angleXInput.value;
+  angleYSlider.value = angleYInput.value;
+  angleZSlider.value = angleZInput.value;
+}
+
+syncAngleInputs();
+
+posXSlider.addEventListener('input', () => {
+  posX = Number(posXSlider.value);
+  posXInput.value = posX;
+});
+
+posYSlider.addEventListener('input', () => {
+  posY = Number(posYSlider.value);
+  posYInput.value = posY;
+});
+
+posZSlider.addEventListener('input', () => {
+  posZ = Number(posZSlider.value);
+  posZInput.value = posZ;
+});
+
 posXInput.addEventListener('input', () => {
   posX = Number(posXInput.value);
+  posXSlider.value = posX;
 });
 
 posYInput.addEventListener('input', () => {
   posY = Number(posYInput.value);
+  posYSlider.value = posY;
 });
 
 posZInput.addEventListener('input', () => {
   posZ = Number(posZInput.value);
+  posZSlider.value = posZ;
 });
 
+angleXSlider.addEventListener('input', () => {
+  angleXInput.value = angleXSlider.value;
+  angleX = Number(angleXSlider.value) * Math.PI / 180;
+});
+angleYSlider.addEventListener('input', () => {
+  angleYInput.value = angleYSlider.value;
+  angleY = Number(angleYSlider.value) * Math.PI / 180;
+});
+angleZSlider.addEventListener('input', () => {
+  angleZInput.value = angleZSlider.value;
+  angleZ = Number(angleZSlider.value) * Math.PI / 180;
+});
+
+angleXInput.addEventListener('input', () => {
+  angleX = Number(angleXInput.value) * Math.PI / 180;
+  angleXSlider.value = angleXInput.value;
+});
+angleYInput.addEventListener('input', () => {
+  angleY = Number(angleYInput.value) * Math.PI / 180;
+  angleYSlider.value = angleYInput.value;
+});
+angleZInput.addEventListener('input', () => {
+  angleZ = Number(angleZInput.value) * Math.PI / 180;
+  angleZSlider.value = angleZInput.value;
+});
+
+const roundingGroup = document.getElementById('rounding-group');
+
+gradients.addEventListener('change', () => {
+  const children = roundingGroup.children;
+
+  if (gradients.checked) {
+    for (let child of children) {
+      child.classList.remove('hidden');
+    }
+  }
+  else {
+    for (let child of children) {
+      child.classList.add('hidden');
+    }
+  }
+});
 
 console.log(game);
 
@@ -178,21 +264,18 @@ function line(p1, p2){
   ctx.restore();
 }
 
-let angleX=0, angleY=0, angleZ=0;
-let posX=0, posY=0, posZ=6;
-
 const circunference = 2*Math.PI;
 
-function globalTransform(p, angle, sliderVal){
+function globalTransform(p, angle){
   let copyP = {...p};
 
-  if(rotation_x.checked){
+  if(rotationX.checked){
     angleX += angle;
   }
-  if(rotation_y.checked){
+  if(rotationY.checked){
     angleY += angle;
   }
-  if(rotation_z.checked){
+  if(rotationZ.checked){
     angleZ += angle;
   }
 
@@ -212,8 +295,6 @@ function globalTransform(p, angle, sliderVal){
 
   copyP = rotate_yz(rotate_xz(rotate_xy(copyP, angleZ), angleY), angleX);
   const translatedP = translate(copyP, {dx: posX, dy: posY, dz: posZ});
-  //const translatedP = translate_z(copyP, sliderVal);
-  //console.log(translatedP);
 
   return screen(
     project(
@@ -225,10 +306,8 @@ function globalTransform(p, angle, sliderVal){
 function displayFaces(edges, vertices, angle){
   for(f of edges){
     for(let i=0; i<f.length; i++){
-      const a = globalTransform(vertices[f[i]], angle, zSliderVal);
-      const b = globalTransform(vertices[f[(i+1)%f.length]], angle, zSliderVal);
-      
-      //console.log(a);
+      const a = globalTransform(vertices[f[i]], angle);
+      const b = globalTransform(vertices[f[(i+1)%f.length]], angle);
       
       line(a, b);
     }
@@ -258,9 +337,7 @@ function frame(){
   dz += dt;
   const angle = cumulative_speed.checked ? dt : degreeToRad(dt);
 
-  clear();
-  rbgSquare(ctx);
-  //displayFaces(poliedro.getEdges(), poliedro.getVertices(), angle);
+  clear();  
   poliedros.forEach(p => displayFaces(p.getEdges(), p.getVertices(), angle));
   lowBro.forEach(p => displayFaces(p.getEdges(), p.getVertices(), angle));
 
@@ -268,10 +345,13 @@ function frame(){
     algunsMovimentos(dz);
   }
   if(gradients.checked){
+    rbgSquare(ctx);
     Gradient(ctx);
   }
-
-  drawOrbs(ctx, orbs);
+  if(showOrbs.checked){
+    drawOrbs(ctx, orbs);
+  }
+  
   setTimeout(frame, 1000/FPS);
 }
 

@@ -7,21 +7,56 @@ body {
   background-color: #f4f4f9;
 }
 
+.hidden{
+  display: none !important;
+}
+
 .container {
-  display: flex;
-  align-items: flex-start;
+  display: grid;
+  grid-template-areas: 
+    "um um dois tres"
+    "um um dois tres"
+    "quatro quatro quatro quatro";
+  gap: 10px 20px;
 }
 
 #game {
+  grid-area: um;
   border: 1px solid #ccc;
   background-color: #ffffff;
 }
 
-.controls {
+#controls {
+  grid-area: dois;
   display: flex;
   flex-direction: column;
-  margin-left: 20px;
   max-width: 250px;
+}
+
+#infos {
+  grid-area: tres;
+  text-align: center;
+  padding-left: 20px;
+}
+
+#files {
+  grid-area: quatro;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.section-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.section-label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
 }
 
 .control-group {
@@ -40,81 +75,52 @@ body {
   width: 100%;
 }
 
-.control-group p {
-  font-size: 0.85rem;
-  color: #555;
-}
-
 #z_value, #rounding_value {
   font-size: 1.1rem;
   font-weight: bold;
 }
 
-.rotation-controls{
+.rotation-controls {
   display: flex;
   justify-content: space-around;
 }
 
-.rotation-label{
+.rotation-label {
   text-align: center;
 }
 
-.rotation-checkbox{
+.rotation-checkbox {
   text-align: center;
 }
 
-.flex{
+.flex-columns {
   display: flex;
-  flex-direction: row;
+  gap: 30px;
 }
 
-.container{
-  display: grid;
-  grid-template-areas: 
-  "um um dois tres"
-  "um um quatro quatro";
-  gap: 10px 20px;
-}
-
-#game{
-  grid-area: um;
-}
-
-#controls{
-  grid-area: dois;
-}
-
-#infos{
-  padding-left: 20px;
-  grid-area: tres;
-}
-
-#files{
-  grid-area: quatro;
-}
-
-.bold{
-  font-weight: bold;
-}
-
-.angles {
+.position-column,
+.rotation-column {
   display: flex;
+  flex-direction: column;
   gap: 15px;
 }
 
-.angle-group {
+.position-group,
+.rotation-group {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 4px;
 }
 
-.angle-label {
-  font-weight: bold;
-  margin-bottom: 4px;
-}
-
+.pos-input,
 .angle-input {
   width: 70px;
   text-align: center;
   font-family: monospace;
+}
+
+.position-group input[type="range"],
+.rotation-group input[type="range"] {
+  width: 100%;
 }
