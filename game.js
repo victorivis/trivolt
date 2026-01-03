@@ -1,7 +1,22 @@
-const teclas = {};
+const keyHold = {};
+let keyUp = {};
+let keyDown = {};
 
-window.addEventListener("keydown", e => teclas[e.key] = true);
-window.addEventListener("keyup",   e => teclas[e.key] = false);
+window.addEventListener("keydown", e => { 
+  if (e.repeat) return;
+  keyHold[e.key] = 1;
+  keyDown[e.key] = true;
+});
+window.addEventListener("keyup",   e => {
+  keyUp[e.key] = true;
+  delete keyHold[e.key];
+});
+
+let blinkCount=0;
+const blinkTime = FPS*2;
+const blinkFreq = 3;
+
+let isPaused = false;
 
 const roadHeight=0;
 const roadStartZ=-8;
@@ -36,6 +51,10 @@ const gamePolyedras = [
   enemies
 ]
 
+function blinkPlayer(){
+  blinkCount = blinkTime;
+}
+
 function displayGameEntities(){
   gamePolyedras.forEach(
     gp => gp.forEach(
@@ -46,35 +65,75 @@ function displayGameEntities(){
 
 let debug = false;
 
+function clearObj(obj){
+  for (const key in obj) {
+    if (Object.hasOwn(obj, key)) {
+      delete obj[key];
+    }
+  }
+}
+
+const keyHoldTime = 2;
+
 function runControls(){
-  const step = 1;
+  if(!isPaused){
+    const step = 1;
 
-  if(teclas['w'] && playersPos[0][1]+step <= moveLimR){
-    playersPos[0][1] += step;
-    players[0].move({dx: 0, dy: 0, dz: step});
-  }
-  if(teclas['s'] && playersPos[0][1]-step >= moveLimL){
-    playersPos[0][1] -= step;
-    players[0].move({dx: 0, dy: 0, dz: -step});
-  }
-  if(teclas['a'] && playersPos[0][0]-step >= moveLimL){
-    playersPos[0][0] -= step;
-    players[0].move({dx: -step, dy: 0, dz: 0});
-  }
-  if(teclas['d'] && playersPos[0][0]+step <= moveLimR){
-    playersPos[0][0] += step;
-    players[0].move({dx: step, dy: 0, dz: 0});
+    if(keyHold['w'] && playersPos[0][1]+step <= moveLimR){
+      playersPos[0][1] += step;
+      players[0].move({dx: 0, dy: 0, dz: step});
+    }
+    if(keyHold['s'] && playersPos[0][1]-step >= moveLimL){
+      playersPos[0][1] -= step;
+      players[0].move({dx: 0, dy: 0, dz: -step});
+    }
+    if((keyDown['a'] || keyHold['a']>keyHoldTime) && playersPos[0][0]-step >= moveLimL){
+      playersPos[0][0] -= step;
+      players[0].move({dx: -step, dy: 0, dz: 0});
+
+      if(keyHold['a'] > 0){
+        keyHold['a'] -= keyHoldTime;
+      }
+    }
+    if((keyDown['d'] || keyHold['d']>keyHoldTime) && playersPos[0][0]+step <= moveLimR){
+      playersPos[0][0] += step;
+      players[0].move({dx: step, dy: 0, dz: 0});
+
+      if(keyHold['d'] > 0){
+        keyHold['d'] -= keyHoldTime;
+      }
+    }
+
+    for (const key in keyHold) {
+      keyHold[key]++;
+    }
   }
 
-  if(teclas['l']){
+  if(keyDown['p']){
+    isPaused = !isPaused;
+  }
+
+  if(keyHold['l']){
     debug = true;
   }
   else{
     debug = false;
   }
+
+  //keyDown = {};
+  //keyUp = {};
+
+  clearObj(keyDown);
+  clearObj(keyUp);
+
+  if(debug){
+    console.log("Keys");
+    console.log(keyDown);
+    console.log(keyUp);
+  }
 }
 
-function enemyCycle(){
+function updateEnemies(){
   const step = 20/FPS;
 
   const chance = 10;
@@ -86,6 +145,7 @@ function enemyCycle(){
     const pos = Math.floor(Math.random() * dist); 
 
     const X = (roadStep * pos - moveLimR);
+    
     enemies.push(
       new Octaedro(X, 0.5, roadEndZ, 0.6)
     );
@@ -102,9 +162,26 @@ function enemyCycle(){
   }
 }
 
+function updatePlayer(){
+  if(blinkCount>=0){
+    if(blinkCount%blinkFreq == 1){
+      players[0].hide();
+    }
+    else{
+      players[0].show();
+    }
+
+    blinkCount--;
+  }
+}
+
 function gameLoop(){
   runControls();
-  enemyCycle();
+
+  if(!isPaused){
+    updateEnemies();
+    updatePlayer();
+  }
   displayGameEntities();
 
   if(debug){

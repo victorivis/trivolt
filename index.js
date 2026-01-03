@@ -38,10 +38,6 @@ angleZInput.addEventListener('input', ()=>{
   angleZ = Math.PI * Number(angleZInput.value)/180;
 });
 
-//let angleX=degreeToRad(270), angleY=degreeToRad(317.8), angleZ=degreeToRad(165);
-let angleX=degreeToRad(310), angleY=degreeToRad(320), angleZ=0;
-let posX=0, posY=0, posZ=7.8;
-
 function syncPosInputs() {
   posXInput.value = posX;
   posYInput.value = posY;
@@ -140,20 +136,11 @@ gradients.addEventListener('change', () => {
 });
 
 console.log(game);
-
-const BACKGROUND = "#2a2a2aff";
-const FOREGROUND = "#0e900e";
-const ENTITY = "#960b0bff";
-
-const w = 800, h = 600;
 game.height = h;
 game.width = w;
 const ctx = game.getContext("2d");
-console.log(ctx);
 
 let dz = 0;
-const FPS = 60;
-
 function clear(){
   ctx.fillStyle = BACKGROUND;
   ctx.fillRect(0, 0, w, h);
@@ -184,10 +171,6 @@ function circle(x, y, radius=50){
   ctx.beginPath();
   ctx.arc(x, y, radius, 0, Math.PI * 2);
   ctx.stroke();
-}
-
-function degreeToRad(angle){
-  return angle * Math.PI / 180;
 }
 
 function translate({x, y, z}, {dx, dy, dz}){
@@ -356,6 +339,7 @@ function frame(){
 
 function init(){
   console.log(roads);
+  blinkPlayer();
 
   setTimeout(frame, 1000/FPS);
 }

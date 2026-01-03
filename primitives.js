@@ -3,6 +3,7 @@ class Polyedra{
   edges
   center
   translation
+  isOn
 
   constructor(vertices){
     this.translation = {dx: 0, dy: 0, dz: 0};
@@ -15,10 +16,21 @@ class Polyedra{
         this.edges[0].push(i);
       }
     }
+
+    this.isOn = true;
+  }
+
+  show(){
+    this.isOn=true;
+  }
+
+  hide(){
+    this.isOn=false;
   }
 
   getEdges(){
-    return this.edges;
+    if(this.isOn) return this.edges;
+    return [];
   }
 
   getVertices(){
@@ -116,7 +128,5 @@ class TriangularPrisme extends Polyedra{
       [1, 4],
       [2, 5],
     ];
-
-    console.log(this.vertices);
   }
 }
