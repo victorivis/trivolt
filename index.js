@@ -245,7 +245,6 @@ function line(p1, p2){
 const circunference = 2*Math.PI;
 
 function globalTransform(p, angle){
-  let copyP = {...p};
 
   if(rotationX.checked){
     angleX += angle;
@@ -273,7 +272,7 @@ function globalTransform(p, angle){
     angleZInput.value = (angleZ * 180 / Math.PI).toFixed(2);
   }
 
-  copyP = rotate_yz(rotate_xz(rotate_xy(copyP, angleZ), angleY), angleX);
+  const copyP = rotate_yz(rotate_xz(rotate_xy(p, angleZ), angleY), angleX);
   const translatedP = translate(copyP, {dx: posX, dy: posY, dz: posZ});
 
   return screen(
@@ -327,7 +326,6 @@ function frame(){
   const angle = cumulative_speed.checked ? dt : degreeToRad(dt);
   globalAngle = angle;
 
-  startPath();
   clear();
   gameLoop();
 
@@ -341,16 +339,12 @@ function frame(){
   if(showOrbs.checked){
     drawOrbs(ctx, orbs);
   }
-
-  render();
   
   setTimeout(frame, 1000/FPS);
 }
 
 function init(){
   console.log(roads);
-  blinkPlayer();
-
   setTimeout(frame, 1000/FPS);
 }
 

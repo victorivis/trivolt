@@ -2,6 +2,7 @@ const FPS = 60;
 
 const BACKGROUND = "#2a2a2aff";
 const FOREGROUND = "#0e900e";
+const TEXT = "#00ca00ff";
 const ENTITY = "#960b0bff";
 
 const w = 800, h = 600;

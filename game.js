@@ -44,6 +44,7 @@ const playersPos = [
 ];
 
 const enemies = [];
+const enemiesLane = [];
 
 const gamePolyedras = [
   roads,
@@ -51,16 +52,22 @@ const gamePolyedras = [
   enemies
 ]
 
-function blinkPlayer(){
-  blinkCount = blinkTime;
+let life = 3;
+function damagePlayer(){
+  if(blinkCount <= 0){
+    blinkCount = blinkTime;
+    life--;
+  }
 }
 
 function displayGameEntities(){
+  startPath();
   gamePolyedras.forEach(
     gp => gp.forEach(
       p => displayPolyedra(p)
     )
   );
+  render();
 }
 
 let debug = false;
@@ -133,6 +140,7 @@ function runControls(){
   }
 }
 
+const contactRange = 0.5;
 function updateEnemies(){
   const step = 20/FPS;
 
@@ -143,11 +151,15 @@ function updateEnemies(){
 
     const dist = 1 + (moveLimR-moveLimL)/roadStep;
     const pos = Math.floor(Math.random() * dist); 
-
     const X = (roadStep * pos - moveLimR);
+    
     
     enemies.push(
       new Octaedro(X, 0.5, roadEndZ, 0.6)
+    );
+
+    enemiesLane.push(
+      pos-2
     );
   }
 
@@ -155,9 +167,23 @@ function updateEnemies(){
     e.move({dx: 0, dy: 0, dz: -step});
   }
   
+  if(debug){
+    console.log("playerPos", playersPos[0][0]);
+  }
   for (let i = enemies.length - 1; i>=0; i--) {
-    if (enemies[i].getCenter().z <= roadStartZ) {
+    const posZ = enemies[i].getCenter().z;
+
+    if(debug){
+      console.log("enemy", enemiesLane[i], posZ-contactRange, posZ+contactRange, playersPos[0][1]);
+    }
+
+    if(playersPos[0][0] == enemiesLane[i] && playersPos[0][1] >= posZ-contactRange && playersPos[0][1] <= posZ+contactRange){
+      damagePlayer();
+    }
+
+    if (posZ <= roadStartZ) {
       enemies.splice(i, 1);
+      enemiesLane.splice(i, 1);
     }
   }
 }
@@ -175,6 +201,29 @@ function updatePlayer(){
   }
 }
 
+function drawHUD() {
+  ctx.save();
+  ctx.fillStyle = TEXT;
+  ctx.font = "30px 'Arial'";
+  ctx.textAlign = "left";
+
+  if (life > 0) {
+    let hearts = "▣".repeat(life);
+    ctx.fillText(hearts, 10, 30);
+  } 
+  else {
+    ctx.strokeStyle = TEXT;
+    ctx.lineWidth = 4;
+    ctx.font = "80px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("GAME OVER", w>>1, h>>1);
+    ctx.strokeText("GAME OVER", w>>1, h>>1);
+
+    isPaused = true;
+  }
+  ctx.restore();
+}
+
 function gameLoop(){
   runControls();
 
@@ -183,6 +232,7 @@ function gameLoop(){
     updatePlayer();
   }
   displayGameEntities();
+  drawHUD();
 
   if(debug){
     console.log("Game entities");
