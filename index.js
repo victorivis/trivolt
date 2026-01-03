@@ -152,7 +152,7 @@ const ctx = game.getContext("2d");
 console.log(ctx);
 
 let dz = 0;
-const FPS = 30;
+const FPS = 60;
 
 function clear(){
   ctx.fillStyle = BACKGROUND;
@@ -330,23 +330,6 @@ const lowBro = [
   new Cube(0, -2, 0, 1),
 ]
 
-const roadHeight=0;
-const roadStartZ=-8;
-const roadEndZ=30;
-
-const roads = [
-  new Polyedra([{x: 0.5, y: roadHeight, z: roadStartZ}, {x: 0.5, y: roadHeight, z: roadEndZ}]),
-  new Polyedra([{x: -0.5, y: roadHeight, z: roadStartZ}, {x: -0.5, y: roadHeight, z: roadEndZ}]),
-  new Polyedra([{x: 1.5, y: roadHeight, z: roadStartZ}, {x: 1.5, y: roadHeight, z: roadEndZ}]),
-  new Polyedra([{x: -1.5, y: roadHeight, z: roadStartZ}, {x: -1.5, y: roadHeight, z: roadEndZ}]),
-  new Polyedra([{x: 2.5, y: roadHeight, z: roadStartZ}, {x: 2.5, y: roadHeight, z: roadEndZ}]),
-  new Polyedra([{x: -2.5, y: roadHeight, z: roadStartZ}, {x: -2.5, y: roadHeight, z: roadEndZ}]),
-];
-
-const players = [
-  new TriangularPrisme(0, 0.5, 0, 1, 0.5),
-]
-
 function frame(){
   const dt = 1/FPS;
   dz += dt;
@@ -355,8 +338,6 @@ function frame(){
 
   
   clear();
-  roads.forEach(p => displayPolyedra(p));
-  players.forEach(p => displayPolyedra(p));
   gameLoop();
 
   if(circles.checked){

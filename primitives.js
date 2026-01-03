@@ -30,7 +30,7 @@ class Polyedra{
   }
 
   getCenter(){
-    return this.center;
+    return translate(this.center, this.translation);
   }
 
   move({dx, dy, dz}){
