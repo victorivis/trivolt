@@ -238,14 +238,8 @@ const faces = [
 ];
 
 function line(p1, p2){
-  ctx.save();
-  ctx.lineWidth = 4;
-  ctx.strokeStyle = FOREGROUND;
-  ctx.beginPath();
-  ctx.moveTo(p1.x, p1.y);
-  ctx.lineTo(p2.x, p2.y);
-  ctx.stroke();
-  ctx.restore();
+  globalPath.moveTo(p1.x, p1.y);
+  globalPath.lineTo(p2.x, p2.y);
 }
 
 const circunference = 2*Math.PI;
@@ -313,13 +307,25 @@ const lowBro = [
   new Cube(0, -2, 0, 1),
 ]
 
+function startPath(){
+  globalPath = new Path2D;
+}
+
+function render(){
+  ctx.save();
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = FOREGROUND;
+  ctx.stroke(globalPath);
+  ctx.restore();
+}
+
 function frame(){
   const dt = 1/FPS;
   dz += dt;
   const angle = cumulative_speed.checked ? dt : degreeToRad(dt);
   globalAngle = angle;
 
-  
+  startPath();
   clear();
   gameLoop();
 
@@ -333,6 +339,8 @@ function frame(){
   if(showOrbs.checked){
     drawOrbs(ctx, orbs);
   }
+
+  render();
   
   setTimeout(frame, 1000/FPS);
 }
