@@ -2,8 +2,11 @@ class Polyedra{
   vertices
   edges
   center
+  translation
 
   constructor(vertices){
+    this.translation = {dx: 0, dy: 0, dz: 0};
+
     if(vertices){
       this.vertices = vertices;
       
@@ -19,11 +22,19 @@ class Polyedra{
   }
 
   getVertices(){
-    return this.vertices;
+    const translated = [];
+    for(let v of this.vertices){
+      translated.push(translate(v, this.translation));
+    }
+    return translated;
   }
 
   getCenter(){
     return this.center;
+  }
+
+  move({dx, dy, dz}){
+    this.translation = {dx: this.translation.dx + dx, dy: this.translation.dy + dy, dz: this.translation.dz + dz};
   }
 }
 
@@ -77,5 +88,35 @@ class Cube extends Polyedra{
       [2, 6],
       [3, 7],
     ];
+  }
+}
+
+class TriangularPrisme extends Polyedra{
+  constructor(x, y, z, l, h){
+    super();
+    
+    const r = l/Math.sqrt(3);
+    const th = l*Math.sqrt(3)/2;
+    const tz = z + th*2/3;
+
+    this.vertices = [
+      {x, y: y+h/2, z: tz},
+      {x: x-l/2, y: y+h/2, z: z-th/3},
+      {x: x+l/2, y: y+h/2, z: z-th/3},
+
+      {x, y: y-h/2, z: tz},
+      {x: x-l/2, y: y-h/2, z: z-th/3},
+      {x: x+l/2, y: y-h/2, z: z-th/3},
+    ];
+    
+    this.edges = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [0, 3],
+      [1, 4],
+      [2, 5],
+    ];
+
+    console.log(this.vertices);
   }
 }

@@ -38,8 +38,9 @@ angleZInput.addEventListener('input', ()=>{
   angleZ = Math.PI * Number(angleZInput.value)/180;
 });
 
-let angleX=0, angleY=0, angleZ=0;
-let posX=0, posY=0, posZ=6;
+//let angleX=degreeToRad(270), angleY=degreeToRad(317.8), angleZ=degreeToRad(165);
+let angleX=degreeToRad(310), angleY=degreeToRad(320), angleZ=0;
+let posX=0, posY=0, posZ=7.8;
 
 function syncPosInputs() {
   posXInput.value = posX;
@@ -151,7 +152,7 @@ const ctx = game.getContext("2d");
 console.log(ctx);
 
 let dz = 0;
-const FPS = 50;
+const FPS = 30;
 
 function clear(){
   ctx.fillStyle = BACKGROUND;
@@ -314,6 +315,11 @@ function displayFaces(edges, vertices, angle){
   }
 }
 
+let globalAngle=0;
+function displayPolyedra(polyedra){
+  displayFaces(polyedra.getEdges(), polyedra.getVertices(), globalAngle);
+}
+
 const poliedro = new Cube(0, 0.5, 0, 0.5);
 
 const lowBro = [
@@ -324,22 +330,34 @@ const lowBro = [
   new Cube(0, -2, 0, 1),
 ]
 
-const poliedros = [
-  new Polyedra([{x: -2, y: 0, z: 20}, {x: -2, y: 0, z: -20}]),
-  new Polyedra([{x: -1, y: 0, z: 20}, {x: -1, y: 0, z: -20}]),
-  new Polyedra([{x: 0, y: 0, z: 20}, {x: 0, y: 0, z: -20}]),
-  new Polyedra([{x: 1, y: 0, z: 20}, {x: 1, y: 0, z: -20}]),
-  new Polyedra([{x: 2, y: 0, z: 20}, {x: 2, y: 0, z: -20}]),
+const roadHeight=0;
+const roadStartZ=-8;
+const roadEndZ=30;
+
+const roads = [
+  new Polyedra([{x: 0.5, y: roadHeight, z: roadStartZ}, {x: 0.5, y: roadHeight, z: roadEndZ}]),
+  new Polyedra([{x: -0.5, y: roadHeight, z: roadStartZ}, {x: -0.5, y: roadHeight, z: roadEndZ}]),
+  new Polyedra([{x: 1.5, y: roadHeight, z: roadStartZ}, {x: 1.5, y: roadHeight, z: roadEndZ}]),
+  new Polyedra([{x: -1.5, y: roadHeight, z: roadStartZ}, {x: -1.5, y: roadHeight, z: roadEndZ}]),
+  new Polyedra([{x: 2.5, y: roadHeight, z: roadStartZ}, {x: 2.5, y: roadHeight, z: roadEndZ}]),
+  new Polyedra([{x: -2.5, y: roadHeight, z: roadStartZ}, {x: -2.5, y: roadHeight, z: roadEndZ}]),
 ];
+
+const players = [
+  new TriangularPrisme(0, 0.5, 0, 1, 0.5),
+]
 
 function frame(){
   const dt = 1/FPS;
   dz += dt;
   const angle = cumulative_speed.checked ? dt : degreeToRad(dt);
+  globalAngle = angle;
 
-  clear();  
-  poliedros.forEach(p => displayFaces(p.getEdges(), p.getVertices(), angle));
-  lowBro.forEach(p => displayFaces(p.getEdges(), p.getVertices(), angle));
+  
+  clear();
+  roads.forEach(p => displayPolyedra(p));
+  players.forEach(p => displayPolyedra(p));
+  gameLoop();
 
   if(circles.checked){
     algunsMovimentos(dz);
@@ -356,7 +374,7 @@ function frame(){
 }
 
 function init(){
-  console.log(poliedros);
+  console.log(roads);
 
   setTimeout(frame, 1000/FPS);
 }
