@@ -257,19 +257,21 @@ function globalTransform(p, angle){
     angleZ += angle;
   }
 
-  if(angleX > 2*Math.PI){
-    angleX = angleX%circunference;
-  }
-  if(angleY > 2*Math.PI){
-    angleY = angleY%circunference;
-  }
-  if(angleZ > 2*Math.PI){
-    angleZ = angleZ%circunference;
-  }
+  if(!increasePerfomance){
+    if(angleX > 2*Math.PI){
+      angleX = angleX%circunference;
+    }
+    if(angleY > 2*Math.PI){
+      angleY = angleY%circunference;
+    }
+    if(angleZ > 2*Math.PI){
+      angleZ = angleZ%circunference;
+    }
 
-  angleXInput.value = (angleX * 180 / Math.PI).toFixed(2);
-  angleYInput.value = (angleY * 180 / Math.PI).toFixed(2);
-  angleZInput.value = (angleZ * 180 / Math.PI).toFixed(2);
+    angleXInput.value = (angleX * 180 / Math.PI).toFixed(2);
+    angleYInput.value = (angleY * 180 / Math.PI).toFixed(2);
+    angleZInput.value = (angleZ * 180 / Math.PI).toFixed(2);
+  }
 
   copyP = rotate_yz(rotate_xz(rotate_xy(copyP, angleZ), angleY), angleX);
   const translatedP = translate(copyP, {dx: posX, dy: posY, dz: posZ});
