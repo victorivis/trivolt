@@ -52,7 +52,8 @@ const gamePolyedras = [
   enemies
 ]
 
-let life = 3;
+const maxLife = 3;
+let life = maxLife;
 function damagePlayer(){
   if(blinkCount <= 0){
     blinkCount = blinkTime;
@@ -201,9 +202,67 @@ function updatePlayer(){
   }
 }
 
+let retryButton = {
+  x: 0,
+  y: 0,
+  width: 200,
+  height: 60,
+  text: "RETRY",
+  visible: false
+};
+
+function drawRetryButton() {
+  if (!retryButton.visible) return;
+
+  ctx.save();
+  
+  ctx.fillStyle = BACKGROUND;
+  ctx.fillRect(retryButton.x, retryButton.y, retryButton.width, retryButton.height);
+  ctx.strokeStyle = TEXT_LIGHT;
+  ctx.lineWidth = 2;
+  ctx.strokeRect(retryButton.x, retryButton.y, retryButton.width, retryButton.height);
+
+  ctx.fillStyle = TEXT_LIGHT;
+  ctx.font = "30px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(
+    retryButton.text,
+    retryButton.x + (retryButton.width >> 1),
+    retryButton.y + (retryButton.height >> 1)
+  );
+
+  ctx.restore();
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  game.addEventListener('click', function(event) {
+    if (retryButton.visible) {
+      const rect = game.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      if (x >= retryButton.x && x <= retryButton.x + retryButton.width &&
+          y >= retryButton.y && y <= retryButton.y + retryButton.height) {
+        resetGame();
+      }
+    }
+  });
+});
+
+
+function resetGame(){
+  life = maxLife;
+  enemies.length = 0;
+  enemiesLane.length = 0;
+  isPaused = false;
+  blinkCount = -1;
+}
+
 function drawHUD() {
   ctx.save();
-  ctx.fillStyle = TEXT;
+  ctx.fillStyle = TEXT_LIGHT;
   ctx.font = "30px 'Arial'";
   ctx.textAlign = "left";
 
@@ -212,7 +271,7 @@ function drawHUD() {
     ctx.fillText(hearts, 10, 30);
   } 
   else {
-    ctx.strokeStyle = TEXT;
+    ctx.strokeStyle = TEXT_LIGHT;
     ctx.lineWidth = 4;
     ctx.font = "80px Arial";
     ctx.textAlign = "center";
@@ -220,6 +279,12 @@ function drawHUD() {
     ctx.strokeText("GAME OVER", w>>1, h>>1);
 
     isPaused = true;
+
+    retryButton.visible = true;
+    
+    retryButton.x = (w - retryButton.width) >> 1;
+    retryButton.y = (h >> 1) + 60;
+    drawRetryButton();
   }
   ctx.restore();
 }

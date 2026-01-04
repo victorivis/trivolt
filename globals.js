@@ -1,8 +1,13 @@
 const FPS = 60;
 
+//const FOREGROUND = "#0e900e";
+//const TEXT = "#00ca00ff";
+//const TEXT_LIGHT = "#00FF00";
+
 const BACKGROUND = "#2a2a2aff";
-const FOREGROUND = "#0e900e";
+const FOREGROUND = "#06a506ff";
 const TEXT = "#00ca00ff";
+const TEXT_LIGHT = "#00FF00";
 const ENTITY = "#960b0bff";
 
 const w = 800, h = 600;
