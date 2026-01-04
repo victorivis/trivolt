@@ -128,9 +128,6 @@ function runControls(){
     debug = false;
   }
 
-  //keyDown = {};
-  //keyUp = {};
-
   clearObj(keyDown);
   clearObj(keyUp);
 
@@ -222,12 +219,21 @@ function drawRetryButton() {
   ctx.lineWidth = 2;
   ctx.strokeRect(retryButton.x, retryButton.y, retryButton.width, retryButton.height);
 
+  typewriter.setCurrentText(retryButton.text);
+  let text = typewriter.getText();
+  
+  if(text.length == retryButton.text.length){
+    const blink = Math.floor(Date.now()>>9)&1;
+    if(blink) text += "_";
+    else text += "  ";
+  }
+
   ctx.fillStyle = TEXT_LIGHT;
   ctx.font = "30px Arial";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.fillText(
-    retryButton.text,
+    text,
     retryButton.x + (retryButton.width >> 1),
     retryButton.y + (retryButton.height >> 1)
   );
@@ -235,31 +241,8 @@ function drawRetryButton() {
   ctx.restore();
 }
 
-
-document.addEventListener('DOMContentLoaded', function() {
-  game.addEventListener('click', function(event) {
-    if (retryButton.visible) {
-      const rect = game.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-
-      if (x >= retryButton.x && x <= retryButton.x + retryButton.width &&
-          y >= retryButton.y && y <= retryButton.y + retryButton.height) {
-        resetGame();
-      }
-    }
-  });
-});
-
-
-function resetGame(){
-  life = maxLife;
-  enemies.length = 0;
-  enemiesLane.length = 0;
-  isPaused = false;
-  blinkCount = -1;
-}
-
+const typewriter = new Typewriter();
+const gameOverText = "Game Over";
 function drawHUD() {
   ctx.save();
   ctx.fillStyle = TEXT_LIGHT;
@@ -275,19 +258,47 @@ function drawHUD() {
     ctx.lineWidth = 4;
     ctx.font = "80px Arial";
     ctx.textAlign = "center";
-    ctx.fillText("GAME OVER", w>>1, h>>1);
-    ctx.strokeText("GAME OVER", w>>1, h>>1);
 
+    typewriter.setCurrentText(gameOverText);
+    const text = typewriter.getText();
+    
+    ctx.fillText(text, w>>1, h>>1);
+    ctx.strokeText(text, w>>1, h>>1);
     isPaused = true;
 
-    retryButton.visible = true;
-    
-    retryButton.x = (w - retryButton.width) >> 1;
-    retryButton.y = (h >> 1) + 60;
-    drawRetryButton();
+    if (text.length === gameOverText.length) {
+      retryButton.visible = true;
+      retryButton.x = (w - retryButton.width) >> 1;
+      retryButton.y = (h >> 1) + 60;
+      drawRetryButton();
+    }    
   }
   ctx.restore();
 }
+
+function resetGame(){
+  life = maxLife;
+  enemies.length = 0;
+  enemiesLane.length = 0;
+  isPaused = false;
+  blinkCount = -1;
+  typewriter.reset();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  game.addEventListener('click', function(event) {
+    if (retryButton.visible) {
+      const rect = game.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      if (x >= retryButton.x && x <= retryButton.x + retryButton.width &&
+          y >= retryButton.y && y <= retryButton.y + retryButton.height) {
+        resetGame();
+      }
+    }
+  });
+});
 
 function gameLoop(){
   runControls();
