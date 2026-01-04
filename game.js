@@ -1,6 +1,6 @@
 const keyHold = {};
-let keyUp = {};
-let keyDown = {};
+const keyUp = {};
+const keyDown = {};
 
 window.addEventListener("keydown", e => { 
   if (e.repeat) return;
@@ -199,7 +199,7 @@ function updatePlayer(){
   }
 }
 
-let retryButton = {
+const retryButton = {
   x: 0,
   y: 0,
   width: 200,
@@ -286,6 +286,7 @@ function resetGame(){
   isPaused = false;
   blinkCount = 0;
   typewriter.reset();
+  retryButton.visible=false;
 }
 
 document.addEventListener('DOMContentLoaded', function() {
