@@ -264,14 +264,17 @@ function drawHUD() {
     
     ctx.fillText(text, w>>1, h>>1);
     ctx.strokeText(text, w>>1, h>>1);
-    isPaused = true;
 
     if (text.length === gameOverText.length) {
       retryButton.visible = true;
       retryButton.x = (w - retryButton.width) >> 1;
       retryButton.y = (h >> 1) + 60;
       drawRetryButton();
-    }    
+      isPaused = true;
+    }
+    else{
+      isPaused = !isPaused;
+    }
   }
   ctx.restore();
 }
@@ -281,7 +284,7 @@ function resetGame(){
   enemies.length = 0;
   enemiesLane.length = 0;
   isPaused = false;
-  blinkCount = -1;
+  blinkCount = 0;
   typewriter.reset();
 }
 

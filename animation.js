@@ -1,4 +1,4 @@
-const typingSpeedMs = 130;
+const typingSpeedMs = 135;
 class Typewriter{
   static textInfo = {};
   #curText;
