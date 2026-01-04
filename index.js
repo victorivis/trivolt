@@ -1,3 +1,27 @@
+function createFastRotation(angleX, angleY, angleZ) {
+  const cx = Math.cos(angleX);
+  const sx = Math.sin(angleX);
+  const cy = Math.cos(angleY);
+  const sy = Math.sin(angleY);
+  const cz = Math.cos(angleZ);
+  const sz = Math.sin(angleZ);
+  
+  return function(p) {
+    const x1 = cz * p.x - sz * p.y;
+    const y1 = sz * p.x + cz * p.y;
+    
+    const x2 = cy * x1 - sy * p.z;
+    const z2 = sy * x1 + cy * p.z;
+    
+    const y3 = cx * y1 - sx * z2;
+    const z3 = sx * y1 + cx * z2;
+    
+    return { x: x2, y: y3, z: z3 };
+  };
+}
+
+const fastRotator = createFastRotation(angleX, angleY, angleZ);
+
 const roundingSlider = document.getElementById('rounding');
 const roundingValue = document.getElementById('rounding_value');
 
@@ -95,14 +119,17 @@ posZInput.addEventListener('input', () => {
 angleXSlider.addEventListener('input', () => {
   angleXInput.value = angleXSlider.value;
   angleX = Number(angleXSlider.value) * Math.PI / 180;
+  fastRotator = createFastRotation(angleX, angleY, angleZ);
 });
 angleYSlider.addEventListener('input', () => {
   angleYInput.value = angleYSlider.value;
   angleY = Number(angleYSlider.value) * Math.PI / 180;
+  fastRotator = createFastRotation(angleX, angleY, angleZ);
 });
 angleZSlider.addEventListener('input', () => {
   angleZInput.value = angleZSlider.value;
   angleZ = Number(angleZSlider.value) * Math.PI / 180;
+  fastRotator = createFastRotation(angleX, angleY, angleZ);
 });
 
 angleXInput.addEventListener('input', () => {
@@ -152,11 +179,13 @@ function point({x, y}){
   ctx.fillRect(x - s/2, y - s/2, s, s);
 }
 
+const w2 = w/2;
+const h2 = h/2;
 function screen(p) {
   // -1..1 => 0..2 => 0..1 => 0..w
   return {
-    x: (p.x + 1)/2*game.width,
-    y: (1 - p.y)/2*game.height,
+    x: (p.x + 1)*w2,
+    y: (1 - p.y)*h2,
   }
 }
 
@@ -272,7 +301,7 @@ function globalTransform(p, angle){
     angleZInput.value = (angleZ * 180 / Math.PI).toFixed(2);
   }
 
-  const copyP = rotate_yz(rotate_xz(rotate_xy(p, angleZ), angleY), angleX);
+  const copyP = fastRotator(p);
   const translatedP = translate(copyP, {dx: posX, dy: posY, dz: posZ});
 
   return screen(
