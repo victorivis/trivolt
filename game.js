@@ -17,6 +17,7 @@ const blinkTime = FPS*2;
 const blinkFreq = 3;
 
 let isPaused = false;
+let movementBlock = false;
 
 const roadHeight=0;
 const roadStartZ=-8;
@@ -38,7 +39,7 @@ const roads = [
 
 const players = [
   new TriangularPrisme(0, 0.5, 0, 1, 0.5),
-]
+];
 
 const playersPos = [
   [0,0],
@@ -85,7 +86,7 @@ function clearObj(obj){
 const keyHoldTime = 2;
 
 function runControls(){
-  if(!isPaused){
+  if(!isPaused && !movementBlock){
     const step = roadStep;
 
     if(keyHold['w'] && playersPos[0][1]+step <= moveLimR){
@@ -118,7 +119,7 @@ function runControls(){
     }
   }
 
-  if(keyDown['p']){
+  if(keyDown['p'] && !movementBlock){
     isPaused = !isPaused;
   }
 
@@ -170,7 +171,7 @@ function spawnEnemy(lane, X){
 
 const contactRange = 0.5;
 function updateEnemies(){
-  const step = 20/FPS;
+  const step = 10/FPS;
 
   const chance = 10;
   const ran = Math.floor(Math.random()*chance);
@@ -275,6 +276,7 @@ function drawHUD() {
     ctx.fillText(hearts, 10, 30);
   } 
   else {
+    movementBlock = true;
     ctx.strokeStyle = TEXT_LIGHT;
     ctx.lineWidth = 4;
     ctx.font = "80px Arial";
@@ -302,6 +304,7 @@ function drawHUD() {
 
 function resetGame(){
   life = maxLife;
+  movementBlock = false;
   enemies.length = 0;
   enemiesLane.length = 0;
   isPaused = false;
