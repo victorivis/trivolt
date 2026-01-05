@@ -130,3 +130,29 @@ class TriangularPrisme extends Polyedra{
     ];
   }
 }
+
+class Cylinder extends Polyedra{
+  constructor(x, y, z, r, h){
+    super();
+
+    this.vertices = [];
+    this.center = {x, y, z};
+
+    for (let t = 0; t <= 2*Math.PI; t += 0.25) {
+      this.vertices.push({ x: x + Math.cos(t)*r, y: y+h/2, z: z + Math.sin(t)*r });
+    }
+    const tam = this.vertices.length;
+
+    this.edges = [[], [],
+      [tam>>1, tam+(tam>>1)], [0, tam],
+      //[tam>>2, tam+(tam>>2)],
+      [(tam>>2) + (tam>>1), tam+(tam>>2)+(tam>>1)]
+    ];
+    for(let i=0; i<tam; i++){
+      this.edges[0].push(i);
+      this.edges[1].push(i+tam);
+
+      this.vertices.push({...this.vertices[i], y: y-h/2});
+    }    
+  }
+}

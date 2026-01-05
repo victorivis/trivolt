@@ -25,6 +25,7 @@ const roadEndZ=30;
 const moveLimL = -2;
 const moveLimR = 2;
 const roadStep = 1;
+const moveDist = (moveLimR - moveLimL)/roadStep + 1;
 
 const roads = [
   new Polyedra([{x: 0.5, y: roadHeight, z: roadStartZ}, {x: 0.5, y: roadHeight, z: roadEndZ}]),
@@ -85,7 +86,7 @@ const keyHoldTime = 2;
 
 function runControls(){
   if(!isPaused){
-    const step = 1;
+    const step = roadStep;
 
     if(keyHold['w'] && playersPos[0][1]+step <= moveLimR){
       playersPos[0][1] += step;
@@ -138,6 +139,35 @@ function runControls(){
   }
 }
 
+function spawnEnemy(lane, X){
+  if(obstacleTypes.checked){
+    if((lane&7)==2){
+      enemies.push(
+        new Cube(X, 0.5, roadEndZ, 0.4, 1)
+      );
+    }
+    else if(lane&1){
+      enemies.push(
+        new Cylinder(X, 0.5, roadEndZ, 0.4, 1)
+      );
+    }
+    else{
+      enemies.push(
+        new Octaedro(X, 0.5, roadEndZ, 0.6)
+      );
+    }
+  }
+  else{
+    enemies.push(
+      new Octaedro(X, 0.5, roadEndZ, 0.6)
+    );
+  }
+
+  enemiesLane.push(
+    lane-(moveDist>>1)
+  );
+}
+
 const contactRange = 0.5;
 function updateEnemies(){
   const step = 20/FPS;
@@ -146,19 +176,10 @@ function updateEnemies(){
   const ran = Math.floor(Math.random()*chance);
 
   if(ran == 1){
+    const lane = Math.floor(Math.random() * moveDist); 
+    const X = (roadStep * lane - moveLimR);
 
-    const dist = 1 + (moveLimR-moveLimL)/roadStep;
-    const pos = Math.floor(Math.random() * dist); 
-    const X = (roadStep * pos - moveLimR);
-    
-    
-    enemies.push(
-      new Octaedro(X, 0.5, roadEndZ, 0.6)
-    );
-
-    enemiesLane.push(
-      pos-2
-    );
+    spawnEnemy(lane, X);
   }
 
   for(e of enemies){

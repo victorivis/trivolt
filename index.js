@@ -301,7 +301,8 @@ function globalTransform(p, angle){
     angleZInput.value = (angleZ * 180 / Math.PI).toFixed(2);
   }
 
-  const copyP = fastRotator(p);
+  //const copyP = fastRotator(p);
+  const copyP = rotate_yz(rotate_xz(rotate_xy(p, angleZ), angleY), angleX);
   const translatedP = translate(copyP, {dx: posX, dy: posY, dz: posZ});
 
   return screen(
