@@ -170,13 +170,12 @@ function spawnEnemy(lane, X){
 }
 
 const contactRange = 0.5;
+let spawnRate = 0.09;
+let enemySpeed = 20/FPS;
 function updateEnemies(){
-  const step = 10/FPS;
+  const ran = Math.random();
 
-  const chance = 10;
-  const ran = Math.floor(Math.random()*chance);
-
-  if(ran == 1){
+  if(ran < spawnRate){
     const lane = Math.floor(Math.random() * moveDist); 
     const X = (roadStep * lane - moveLimR);
 
@@ -184,7 +183,7 @@ function updateEnemies(){
   }
 
   for(e of enemies){
-    e.move({dx: 0, dy: 0, dz: -step});
+    e.move({dx: 0, dy: 0, dz: -enemySpeed});
   }
   
   if(debug){

@@ -379,3 +379,33 @@ function init(){
 }
 
 init();
+
+function syncEnemyProperties(){
+  enemySpeedSlider.value = enemySpeed*FPS;
+  enemySpeedInput.value = enemySpeed*FPS;
+  spawnRateSlider.value = spawnRate*100;
+  spawnRateInput.value = spawnRate*100;
+}
+
+enemySpeedInput.addEventListener("change", e => {
+  enemySpeed = Number(enemySpeedInput.value)/FPS;
+  enemySpeedSlider.value = enemySpeedInput.value;
+});
+
+enemySpeedSlider.addEventListener("change", e => {
+  enemySpeed = Number(enemySpeedSlider.value)/FPS;
+  enemySpeedInput.value = enemySpeedSlider.value;
+});
+
+
+spawnRateInput.addEventListener("change", e => {
+  spawnRate = Number(spawnRateInput.value)/100;
+  spawnRateSlider.value = spawnRateInput.value;
+});
+
+spawnRateSlider.addEventListener("change", e => {
+  spawnRate = Number(spawnRateSlider.value)/100;
+  spawnRateInput.value = spawnRateSlider.value;
+});
+
+syncEnemyProperties();
