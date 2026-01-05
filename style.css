@@ -33,6 +33,10 @@ body {
   max-width: 250px;
 }
 
+#controls > * {
+  margin-bottom: 10px;
+}
+
 #infos {
   grid-area: tres;
   text-align: center;
@@ -59,10 +63,11 @@ body {
   display: block;
 }
 
-.control-group {
-  margin-bottom: 15px;
+.ui-group {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 
 .control-label {
@@ -71,8 +76,8 @@ body {
   margin-bottom: 5px;
 }
 
-.control-group input[type="range"] {
-  width: 100%;
+.ui-group input[type="range"] {
+  width: 80%;
 }
 
 #z_value, #rounding_value {
@@ -80,7 +85,7 @@ body {
   font-weight: bold;
 }
 
-.rotation-controls {
+.ui-controls {
   display: flex;
   justify-content: space-around;
 }
@@ -89,7 +94,7 @@ body {
   text-align: center;
 }
 
-.rotation-checkbox {
+.ui-checkbox {
   text-align: center;
 }
 
@@ -98,19 +103,10 @@ body {
   gap: 30px;
 }
 
-.position-column,
-.rotation-column {
+.ui-column {
   display: flex;
   flex-direction: column;
   gap: 15px;
-}
-
-.position-group,
-.rotation-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
 }
 
 .pos-input,
@@ -118,9 +114,4 @@ body {
   width: 70px;
   text-align: center;
   font-family: monospace;
-}
-
-.position-group input[type="range"],
-.rotation-group input[type="range"] {
-  width: 100%;
 }

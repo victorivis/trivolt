@@ -15,51 +15,51 @@
   <canvas id="game"></canvas>
 
   <div class="controls" id="controls">
-    <div class="control-group">
+    <div class="ui-group">
       <label for="circles" class="control-label">Círculos:</label>
       <input type="checkbox" id="circles" />
     </div>
 
-    <div class="control-group">
+    <div class="ui-group">
       <label for="gradients" class="control-label">Gradientes:</label>
       <input type="checkbox" id="gradients" />
     </div>
 
-    <div class="control-group">
+    <div class="ui-group">
       <label for="showOrbs" class="control-label">Orbes:</label>
       <input type="checkbox" id="showOrbs" />
     </div>
 
-    <div class="control-group" id="rounding-group">
+    <div class="ui-group" id="rounding-group">
       <label for="rounding" class="control-label hidden">Arredondamento:</label>
       <input class="hidden" type="range" id="rounding" min="0" max="2000" step="0.5" value="2" />
       <span class="hidden" id="rounding_value">2</span>
     </div>
 
-    <div class="control-group">
+    <div class="ui-group">
       <label class="control-label rotation-label">Rotação: </label>
 
-      <div class="rotation-controls">
-        <div class="control-group">
+      <div class="ui-controls">
+        <div class="ui-group">
           <label for="rotation-x" class="control-label rotation-label">X</label>
-          <input type="checkbox" id="rotation-x" class="rotation-checkbox">
+          <input type="checkbox" id="rotation-x" class="ui-checkbox">
         </div>
 
-        <div class="control-group">
+        <div class="ui-group">
           <label for="rotation-y" class="control-label rotation-label">Y</label>
-          <input type="checkbox" id="rotation-y" class="rotation-checkbox">
-        </div class="control-group">
+          <input type="checkbox" id="rotation-y" class="ui-checkbox">
+        </div class="ui-group">
 
-        <div class="control-group">
+        <div class="ui-group">
           <label for="rotation-z" class="control-label rotation-label">Z</label>
-          <input type="checkbox" id="rotation-z" class="rotation-checkbox">
+          <input type="checkbox" id="rotation-z" class="ui-checkbox">
         </div>
       </div>
 
-      <div class="rotation-controls">        
-        <div class="control-group">
+      <div class="ui-controls">        
+        <div class="ui-group">
           <label class="control-label rotation-label">V <!--elocidade Cumulativa: --> </label>
-          <input type="checkbox" id="cumulative_speed" class="rotation-checkbox">
+          <input type="checkbox" id="cumulative_speed" class="ui-checkbox">
         </div>
       </div>
     </div> 
@@ -71,22 +71,22 @@
     <div class="flex-columns">
 
       <!-- Posições -->
-      <div class="position-column">
+      <div class="ui-column">
         <label class="section-label">Posições:</label>
 
-        <div class="position-group">
+        <div class="ui-group">
           <label>X</label>
           <input type="number" id="pos-x" class="pos-input" step="0.1" value="0">
           <input type="range" id="pos-x-slider" min="-10" max="10" step="0.1" value="0">
         </div>
 
-        <div class="position-group">
+        <div class="ui-group">
           <label>Y</label>
           <input type="number" id="pos-y" class="pos-input" step="0.1" value="0">
           <input type="range" id="pos-y-slider" min="-10" max="10" step="0.1" value="0">
         </div>
 
-        <div class="position-group">
+        <div class="ui-group">
           <label>Z</label>
           <input type="number" id="pos-z" class="pos-input" step="0.1" value="6">
           <input type="range" id="pos-z-slider" min="-10" max="20" step="0.1" value="6">
@@ -94,22 +94,22 @@
       </div>
 
       <!-- Ângulos -->
-      <div class="rotation-column">
+      <div class="ui-column">
         <label class="section-label">Ângulos (graus):</label>
 
-        <div class="rotation-group">
+        <div class="ui-group">
           <label>X</label>
           <input type="number" id="angle-x" class="angle-input" value="0" step="1">
           <input type="range" id="angle-x-slider" min="0" max="360" step="0.1" value="0">
         </div>
 
-        <div class="rotation-group">
+        <div class="ui-group">
           <label>Y</label>
           <input type="number" id="angle-y" class="angle-input" value="0" step="1">
           <input type="range" id="angle-y-slider" min="0" max="360" step="0.1" value="0">
         </div>
 
-        <div class="rotation-group">
+        <div class="ui-group">
           <label>Z</label>
           <input type="number" id="angle-z" class="angle-input" value="0" step="1">
           <input type="range" id="angle-z-slider" min="0" max="360" step="0.1" value="0">
@@ -117,10 +117,11 @@
 
       </div>
 
-      <div class="rotation-column">
+      <!-- Propriedades -->
+      <div class="ui-column">
         <label class="section-label">Propriedades:</label>
 
-        <div class="rotation-group">
+        <div class="ui-group">
           <label>Tipos</label>
           <input type="checkbox" id="obstacleTypes">
         </div>
