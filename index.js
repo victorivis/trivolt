@@ -357,7 +357,14 @@ function frame(){
   globalAngle = angle;
 
   clear();
-  gameLoop();
+  if(loadedPolyedra.length > 0){
+    startPath();
+    loadedPolyedra.forEach(p => displayPolyedra(p, angle));
+    render();
+  }
+  else{
+    gameLoop();
+  }
 
   if(circles.checked){
     algunsMovimentos(dz);

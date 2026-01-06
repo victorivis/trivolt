@@ -5,15 +5,20 @@ class Polyedra{
   translation
   isOn
 
-  constructor(vertices){
+  constructor(vertices, edges){
     this.translation = {dx: 0, dy: 0, dz: 0};
 
     if(vertices){
       this.vertices = vertices;
       
-      this.edges = [[]];
-      for(let i=0; i<vertices.length; i++){
-        this.edges[0].push(i);
+      if(!edges){
+        this.edges = [[]];
+        for(let i=0; i<vertices.length; i++){
+          this.edges[0].push(i);
+        }
+      }
+      else{
+        this.edges = edges;
       }
     }
 
