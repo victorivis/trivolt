@@ -413,8 +413,6 @@ function drawStartScreen() {
 
 function drawStartButton(){
   if (!startButton.visible) return;
-  
-  console.log(startButton.x, startButton.y);
   ctx.fillStyle = BACKGROUND;
   ctx.fillRect(startButton.x, startButton.y, startButton.width, startButton.height);
   
@@ -423,7 +421,6 @@ function drawStartButton(){
   ctx.strokeRect(startButton.x, startButton.y, startButton.width, startButton.height);
   
   const blink = Math.floor(Date.now() / 500)&1;
-  console.log(blink);
   ctx.fillStyle = TEXT;
   ctx.font = "bold 38px 'Arial'";
   

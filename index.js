@@ -162,7 +162,6 @@ gradients.addEventListener('change', () => {
   }
 });
 
-console.log(game);
 game.height = h;
 game.width = w;
 const ctx = game.getContext("2d");
@@ -387,7 +386,6 @@ function frame(){
 }
 
 function init(){
-  console.log(roads);
   setTimeout(frame, 1000/FPS);
 }
 
