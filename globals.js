@@ -8,6 +8,7 @@ const BACKGROUND = "#2a2a2a";
 const FOREGROUND = "#06a506";
 const TEXT = "#00ca00";
 const TEXT_LIGHT = "#00ff00";
+const DETAILS_TEXT = "#CCCCCC";
 const ENTITY = "#960b0b";
 
 const w = 800, h = 600;

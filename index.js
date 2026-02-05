@@ -350,6 +350,7 @@ function render(){
   ctx.restore();
 }
 
+let contLegal=60;
 function frame(){
   const dt = 1/FPS;
   dz += dt;
@@ -377,7 +378,12 @@ function frame(){
     drawOrbs(ctx, orbs);
   }
   
-  setTimeout(frame, 1000/FPS);
+  if(startButton.visible){
+    drawStartScreen();
+  }
+  else{
+    setTimeout(frame, 1000/FPS);
+  }
 }
 
 function init(){

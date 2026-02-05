@@ -85,6 +85,20 @@ function clearObj(obj){
 
 const keyHoldTime = 2;
 
+function switchPause(){
+  if(startButton.visible){
+    isPaused = false;
+    startButton.visible = false;
+    startButton.text = "CONTINUAR";
+    startButton.width = 300;
+    frame();
+  }
+  else{
+    isPaused = true;
+    startButton.visible = true;
+  }
+}
+
 function runControls(){
   if(!isPaused && !movementBlock){
     const step = roadStep;
@@ -120,7 +134,7 @@ function runControls(){
   }
 
   if(keyDown['p'] && !movementBlock){
-    isPaused = !isPaused;
+    switchPause();
   }
 
   if(keyHold['l']){
@@ -324,6 +338,16 @@ document.addEventListener('DOMContentLoaded', function() {
         resetGame();
       }
     }
+    if(startButton.visible){
+      const rect = game.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      if (x >= startButton.x && x <= startButton.x + startButton.width &&
+          y >= startButton.y && y <= startButton.y + startButton.height) {
+        switchPause();
+      }
+    }
   });
 });
 
@@ -341,4 +365,80 @@ function gameLoop(){
     console.log("Game entities");
     console.log(gamePolyedras);
   }
+}
+
+let mainMenu = true;
+const startButton = {
+  x: 0,
+  y: 0,
+  width: 270,
+  height: 80,
+  text: "INICIAR",
+  visible: true
+};
+
+//const instructionsText = ["Use WASD to move", "Avoid the obstacles", "Press P to pause"];
+const instructionsText = ["Use WASD para mover", "Desvie dos obstáculos", "Aperte P para pausar"];
+
+let contMassa=0;
+const starMenuOffset = 140;
+const instructionsTextOffset = 70;
+const instructionsTextLineSpace = 35;
+function centerStartButton() {
+  startButton.x = (w - startButton.width) >> 1;
+  startButton.y = 180+starMenuOffset;
+}
+
+function drawStartScreen() {
+  if (!startButton.visible) return;
+
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+  ctx.fillRect(0, 0, w, h);
+  
+  ctx.fillStyle = TEXT;
+  ctx.font = "60px 'Arial'";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("TRIVOLT", w >> 1, starMenuOffset);
+  
+  ctx.font = "24px 'Arial'";
+  ctx.fillStyle = DETAILS_TEXT;
+  instructionsText.forEach((text, index) => {
+    ctx.fillText(text, w >> 1, starMenuOffset + instructionsTextOffset + (index * instructionsTextLineSpace));
+  });
+
+  centerStartButton();
+  drawStartButton();
+}
+
+function drawStartButton(){
+  if (!startButton.visible) return;
+  
+  console.log(startButton.x, startButton.y);
+  ctx.fillStyle = BACKGROUND;
+  ctx.fillRect(startButton.x, startButton.y, startButton.width, startButton.height);
+  
+  ctx.strokeStyle = TEXT;
+  ctx.lineWidth = 4;
+  ctx.strokeRect(startButton.x, startButton.y, startButton.width, startButton.height);
+  
+  const blink = Math.floor(Date.now() / 500)&1;
+  console.log(blink);
+  ctx.fillStyle = TEXT;
+  ctx.font = "bold 38px 'Arial'";
+  
+  let buttonText = startButton.text;
+  
+  if(blink) buttonText += "_";
+  else buttonText += "  ";
+  
+  ctx.fillText(
+    buttonText,
+    startButton.x + (startButton.width >> 1),
+    startButton.y + (startButton.height >> 1)
+  );
+
+  runControls();
+
+  setTimeout(drawStartButton, 500);
 }
