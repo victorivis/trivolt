@@ -1,4 +1,6 @@
 const FPS = 60;
+let timeNow=0;
+let deltaTime=0;
 
 //const FOREGROUND = "#0e900e";
 //const TEXT = "#00ca00ff";

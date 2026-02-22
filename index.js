@@ -349,8 +349,36 @@ function render(){
   ctx.restore();
 }
 
-let contLegal=60;
+function showFPS(){
+  ctx.save();
+  ctx.font = 'bold 20px monospace';
+  ctx.fillStyle = TEXT_LIGHT;
+  ctx.shadowColor = 'black';
+  ctx.shadowBlur = 4;
+  ctx.fillText(`FPS: ${fps}`, w-50, 25);
+  ctx.restore();
+}
+
+let lastTimestamp = performance.now();
+let frameCount = 0;
+let fps = 0;
+let lastFpsUpdate = performance.now();
+function measureFPS(){
+  const newTime = performance.now();
+  frameCount++;
+  
+  if (newTime- lastFpsUpdate >= 1000) {
+    fps = frameCount;
+    frameCount = 0;
+    lastFpsUpdate = newTime;
+  }
+  deltaTime = newTime-timeNow;
+  timeNow = newTime;
+}
+
 function frame(){
+  measureFPS();
+
   const dt = 1/FPS;
   dz += dt;
   const angle = cumulative_speed.checked ? dt : degreeToRad(dt);
@@ -381,6 +409,7 @@ function frame(){
     drawStartScreen();
   }
   else{
+    showFPS();
     setTimeout(frame, 1000/FPS);
   }
 }
