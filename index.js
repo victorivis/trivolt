@@ -410,7 +410,9 @@ function frame(){
   }
   else{
     showFPS();
-    setTimeout(frame, 1000/FPS);
+    const ellapsedTime = performance.now() - timeNow;
+    const waitTime = Math.max(0, expectedTime - ellapsedTime);
+    setTimeout(frame, waitTime);
   }
 }
 

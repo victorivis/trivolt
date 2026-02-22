@@ -184,8 +184,8 @@ function spawnEnemy(lane, X){
 }
 
 const contactRange = 0.5;
-let spawnRate = 0.09;
-let enemySpeed = 20/FPS;
+let spawnRate = 0.086;
+let enemySpeed = (20/60) * (speedFactor);
 function updateEnemies(){
   const ran = Math.random();
 
@@ -197,7 +197,7 @@ function updateEnemies(){
   }
 
   for(e of enemies){
-    e.move({dx: 0, dy: 0, dz: -enemySpeed});
+    e.move({dx: 0, dy: 0, dz: -enemySpeed*deltaTime});
   }
   
   if(debug){

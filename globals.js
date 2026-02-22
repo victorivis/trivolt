@@ -1,6 +1,8 @@
-const FPS = 60;
+const FPS = 80;
 let timeNow=0;
 let deltaTime=0;
+const expectedTime = 1000/FPS;
+const speedFactor = 50/1000;
 
 //const FOREGROUND = "#0e900e";
 //const TEXT = "#00ca00ff";
