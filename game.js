@@ -2,6 +2,12 @@ const keyHold = {};
 const keyUp = {};
 const keyDown = {};
 
+let mouseDown = false;
+let lastMouseX = 0;
+let dragLeft = false;
+let dragRight = false;
+const dragThreshold = 5;
+
 window.addEventListener("keydown", e => { 
   if (e.repeat) return;
   keyHold[e.key] = 1;
@@ -10,6 +16,32 @@ window.addEventListener("keydown", e => {
 window.addEventListener("keyup",   e => {
   keyUp[e.key] = true;
   delete keyHold[e.key];
+});
+
+window.addEventListener('mousedown', (e) => {
+    mouseDown = true;
+    lastMouseX = e.clientX;
+});
+
+window.addEventListener('mousemove', (e) => {
+    if (!mouseDown) return;
+
+    const deltaX = e.clientX - lastMouseX;
+    lastMouseX = e.clientX;
+
+    if (deltaX > dragThreshold) {
+        dragRight = true;
+        dragLeft = false;
+    } else if (deltaX < -dragThreshold) {
+        dragLeft = true;
+        dragRight = false;
+    }
+});
+
+window.addEventListener('mouseup', () => {
+    mouseDown = false;
+    dragLeft = false;
+    dragRight = false;
 });
 
 let blinkCount=0;
@@ -111,21 +143,29 @@ function runControls(){
       playersPos[0][1] -= step;
       players[0].move({dx: 0, dy: 0, dz: -step});
     }
-    if((keyDown['a'] || keyHold['a']>keyHoldTime) && playersPos[0][0]-step >= moveLimL){
+    if((dragLeft || keyDown['a'] || keyHold['a']>keyHoldTime) && playersPos[0][0]-step >= moveLimL){
       playersPos[0][0] -= step;
       players[0].move({dx: -step, dy: 0, dz: 0});
 
       if(keyHold['a'] > 0){
         keyHold['a'] -= keyHoldTime;
       }
+
+      mouseDown = false;
+      dragLeft = false;
+      dragRight = false;
     }
-    if((keyDown['d'] || keyHold['d']>keyHoldTime) && playersPos[0][0]+step <= moveLimR){
+    if((dragRight || keyDown['d'] || keyHold['d']>keyHoldTime) && playersPos[0][0]+step <= moveLimR){
       playersPos[0][0] += step;
       players[0].move({dx: step, dy: 0, dz: 0});
 
       if(keyHold['d'] > 0){
         keyHold['d'] -= keyHoldTime;
       }
+
+      mouseDown = false;
+      dragLeft = false;
+      dragRight = false;
     }
 
     for (const key in keyHold) {
@@ -184,7 +224,7 @@ function spawnEnemy(lane, X){
 }
 
 const contactRange = 0.5;
-let spawnRate = 0.086;
+let spawnRate = 0.078;
 let enemySpeed = (20/60) * (speedFactor);
 function updateEnemies(){
   const ran = Math.random();

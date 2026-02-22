@@ -1,4 +1,4 @@
-const FPS = 80;
+const FPS = 70;
 let timeNow=0;
 let deltaTime=0;
 const expectedTime = 1000/FPS;
