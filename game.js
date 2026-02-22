@@ -4,6 +4,8 @@ const keyDown = {};
 
 let mouseDown = false;
 let lastMouseX = 0;
+let touchActive = false;
+let lastTouchX = 0;
 let dragLeft = false;
 let dragRight = false;
 const dragThreshold = 5;
@@ -16,6 +18,45 @@ window.addEventListener("keydown", e => {
 window.addEventListener("keyup",   e => {
   keyUp[e.key] = true;
   delete keyHold[e.key];
+});
+
+window.addEventListener('touchstart', (e) => {
+  // Previne comportamento padrão como zoom ou rolagem (opcional, mas recomendado)
+  e.preventDefault();
+  const touch = e.touches[0];
+  if (touch) {
+    touchActive = true;
+    lastTouchX = touch.clientX;
+  }
+}, { passive: false });
+
+window.addEventListener('touchmove', (e) => {
+  if (!touchActive) return;
+  // Previne a rolagem da página durante o arrasto
+  e.preventDefault();
+  const touch = e.touches[0];
+  if (!touch) return;
+  const deltaX = touch.clientX - lastTouchX;
+  lastTouchX = touch.clientX;
+  if (deltaX > dragThreshold) {
+    dragRight = true;
+    dragLeft = false;
+  } else if (deltaX < -dragThreshold) {
+    dragLeft = true;
+    dragRight = false;
+  }
+}, { passive: false });
+
+window.addEventListener('touchend', (e) => {
+  touchActive = false;
+  dragLeft = false;
+  dragRight = false;
+});
+
+window.addEventListener('touchcancel', (e) => {
+  touchActive = false;
+  dragLeft = false;
+  dragRight = false;
 });
 
 window.addEventListener('mousedown', (e) => {
@@ -151,6 +192,7 @@ function runControls(){
         keyHold['a'] -= keyHoldTime;
       }
 
+      touchActive = false;
       mouseDown = false;
       dragLeft = false;
       dragRight = false;
@@ -163,6 +205,7 @@ function runControls(){
         keyHold['d'] -= keyHoldTime;
       }
 
+      touchActive = false;
       mouseDown = false;
       dragLeft = false;
       dragRight = false;
