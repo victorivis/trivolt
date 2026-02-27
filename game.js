@@ -409,29 +409,43 @@ function resetGame(){
   retryButton.visible=false;
 }
 
+function handleResume(event) {
+  if (event.type === 'touchstart') {
+    event.preventDefault();
+  }
+  
+  let clientX, clientY;
+  if (event.touches) {
+    clientX = event.touches[0].clientX;
+    clientY = event.touches[0].clientY;
+  } else {    
+    clientX = event.clientX;
+    clientY = event.clientY;
+  }
+  
+  const rect = game.getBoundingClientRect();
+  const x = clientX - rect.left;
+  const y = clientY - rect.top;
+  
+  if (retryButton.visible) {
+    if (x >= retryButton.x && x <= retryButton.x + retryButton.width &&
+        y >= retryButton.y && y <= retryButton.y + retryButton.height) {
+      resetGame();
+      return;
+    }
+  }
+  
+  if (startButton.visible) {
+    if (x >= startButton.x && x <= startButton.x + startButton.width &&
+        y >= startButton.y && y <= startButton.y + startButton.height) {
+      switchPause();
+    }
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-  game.addEventListener('click', function(event) {
-    if (retryButton.visible) {
-      const rect = game.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-
-      if (x >= retryButton.x && x <= retryButton.x + retryButton.width &&
-          y >= retryButton.y && y <= retryButton.y + retryButton.height) {
-        resetGame();
-      }
-    }
-    if(startButton.visible){
-      const rect = game.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-
-      if (x >= startButton.x && x <= startButton.x + startButton.width &&
-          y >= startButton.y && y <= startButton.y + startButton.height) {
-        switchPause();
-      }
-    }
-  });
+  game.addEventListener('click', handleResume);
+  game.addEventListener('touchstart', handleResume);
 });
 
 function gameLoop(){
