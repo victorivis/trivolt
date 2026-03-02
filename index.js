@@ -359,15 +359,15 @@ function showFPS(){
   ctx.restore();
 }
 
+lastFpsUpdate = performance.now();
 let lastTimestamp = performance.now();
 let frameCount = 0;
 let fps = 0;
-let lastFpsUpdate = performance.now();
 function measureFPS(){
   const newTime = performance.now();
   frameCount++;
   
-  if (newTime- lastFpsUpdate >= 1000) {
+  if (newTime-lastFpsUpdate >= 1000) {
     fps = frameCount;
     frameCount = 0;
     lastFpsUpdate = newTime;

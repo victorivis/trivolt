@@ -1,6 +1,7 @@
 const FPS = 70;
-let timeNow=0;
 let deltaTime=0;
+let timeNow = performance.now();
+let lastFpsUpdate = performance.now();
 const expectedTime = 1000/FPS;
 const speedFactor = 50/1000;
 

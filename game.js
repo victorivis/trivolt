@@ -21,7 +21,6 @@ window.addEventListener("keyup",   e => {
 });
 
 window.addEventListener('touchstart', (e) => {
-  // Previne comportamento padrão como zoom ou rolagem (opcional, mas recomendado)
   e.preventDefault();
   const touch = e.touches[0];
   if (touch) {
@@ -32,7 +31,6 @@ window.addEventListener('touchstart', (e) => {
 
 window.addEventListener('touchmove', (e) => {
   if (!touchActive) return;
-  // Previne a rolagem da página durante o arrasto
   e.preventDefault();
   const touch = e.touches[0];
   if (!touch) return;
@@ -158,17 +156,25 @@ function clearObj(obj){
 
 const keyHoldTime = 2;
 
+let timePaused=performance.now();
 function switchPause(){
   if(startButton.visible){
     isPaused = false;
     startButton.visible = false;
     startButton.text = "CONTINUAR";
     startButton.width = 300;
+    
+    const timeContinue = performance.now();
+    lastFpsUpdate += timeContinue - timePaused;
+    timeNow = timeContinue - (timePaused-timeNow);
+    deltaTime = timeContinue - timeNow;
+    
     frame();
   }
   else{
     isPaused = true;
     startButton.visible = true;
+    timePaused = performance.now();
   }
 }
 
