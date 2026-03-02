@@ -351,7 +351,7 @@ function render(){
 
 function showFPS(){
   if(!isFPSshowed) return;
-  
+
   ctx.save();
   ctx.font = 'bold 20px monospace';
   ctx.textAlign = "left";
@@ -430,6 +430,8 @@ function syncEnemyProperties(){
   enemySpeedInput.value = enemySpeed*FPS;
   spawnRateSlider.value = spawnRate*100;
   spawnRateInput.value = spawnRate*100;
+
+  console.log(spawnRate, enemySpeed);
 }
 
 enemySpeedInput.addEventListener("change", e => {

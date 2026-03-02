@@ -276,9 +276,12 @@ function spawnEnemy(lane, X){
   );
 }
 
+const baseSpawnRate = 0.078;
+const baseEnemySpeed = (20/60) * (speedFactor);
+
 const contactRange = 0.5;
-let spawnRate = 0.078;
-let enemySpeed = (20/60) * (speedFactor);
+let spawnRate = baseSpawnRate;
+let enemySpeed = baseEnemySpeed;
 function updateEnemies(){
   const ran = Math.random();
 
@@ -419,6 +422,26 @@ function drawHUD() {
 
 let score = 0;
 let bestScore = 0;
+const scorePerSecond=11;
+const perSecondFactor = 1/1000;
+
+const scoreForDificultUpdate = 200;
+const dificultSpeedIncrease = 0.002;
+const dificultSpawnRate = -0.001;
+const spawnRateThreshold = 0.049;
+
+let dificultUpdate = score;
+function updateScore(){
+  score += deltaTime*scorePerSecond*perSecondFactor;
+  dificultUpdate += deltaTime*scorePerSecond*perSecondFactor;
+  if(dificultUpdate >= scoreForDificultUpdate){
+    dificultUpdate -= scoreForDificultUpdate;
+    enemySpeed += dificultSpeedIncrease;
+    spawnRate = Math.max(spawnRate+dificultSpawnRate, spawnRateThreshold);
+    syncEnemyProperties();
+  }
+}
+
 function resetGame(){
   life = maxLife;
   movementBlock = false;
@@ -426,6 +449,9 @@ function resetGame(){
   enemiesLane.length = 0;
   isPaused = false;
   blinkCount = 0;
+  spawnRate = baseSpawnRate;
+  enemySpeed = baseEnemySpeed;
+  dificultUpdate=0;
   score=0;
   bestScore = Math.max(score, bestScore);
   typewriter.reset();
@@ -470,12 +496,6 @@ document.addEventListener('DOMContentLoaded', function() {
   game.addEventListener('click', handleResume);
   game.addEventListener('touchstart', handleResume);
 });
-
-const scorePerSecond=11;
-const perSecondFactor = 1/1000;
-function updateScore(){
-  score += deltaTime*scorePerSecond*perSecondFactor;
-}
 
 function gameLoop(){
   runControls();
