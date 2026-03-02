@@ -385,7 +385,7 @@ function frame(){
   const dt = 1/FPS;
   dz += dt;
   const angle = cumulative_speed.checked ? dt : degreeToRad(dt);
-  globalAngle = angle;
+  globalAngle = angle/20;
 
   clear();
   if(loadedPolyedra.length > 0){
@@ -395,17 +395,6 @@ function frame(){
   }
   else{
     gameLoop();
-  }
-
-  if(circles.checked){
-    algunsMovimentos(dz);
-  }
-  if(gradients.checked){
-    rbgSquare(ctx);
-    Gradient(ctx);
-  }
-  if(showOrbs.checked){
-    drawOrbs(ctx, orbs);
   }
   
   if(startButton.visible){
@@ -417,9 +406,21 @@ function frame(){
     const waitTime = Math.max(0, expectedTime - ellapsedTime);
     setTimeout(frame, waitTime);
   }
+  
+  if(circles.checked){
+    algunsMovimentos(dz);
+  }
+  if(gradients.checked){
+    rbgSquare(ctx);
+    Gradient(ctx);
+  }
+  if(showOrbs.checked){
+    drawOrbs(ctx, orbs);
+  }
 }
 
 function init(){
+  syncEnemyProperties();
   setTimeout(frame, 1000/FPS);
 }
 
