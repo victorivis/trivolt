@@ -222,6 +222,10 @@ function runControls(){
     }
   }
 
+  if(keyDown['f']){
+    isFPSshowed = !isFPSshowed;
+  }
+
   if(keyDown['p'] && !movementBlock){
     switchPause();
   }
@@ -373,11 +377,16 @@ function drawHUD() {
   ctx.font = "30px 'Arial'";
   ctx.textAlign = "left";
 
+  let offset;
   if (life > 0) {
     let hearts = "▣".repeat(life);
     ctx.fillText(hearts, 10, 30);
+    offset = 0;
   } 
   else {
+    offset = 38;
+    let hearts = "▣".repeat(life);
+    ctx.fillText(hearts, 10, 30);
     movementBlock = true;
     ctx.strokeStyle = TEXT_LIGHT;
     ctx.lineWidth = 4;
@@ -401,9 +410,15 @@ function drawHUD() {
       isPaused = !isPaused;
     }
   }
+
+  ctx.font = 'bold 20px monospace';
+  const displayScore = Math.floor(score).toString().padStart(7, '0');
+  ctx.fillText(displayScore, offset+w-90, 30);
   ctx.restore();
 }
 
+let score = 0;
+let bestScore = 0;
 function resetGame(){
   life = maxLife;
   movementBlock = false;
@@ -411,6 +426,8 @@ function resetGame(){
   enemiesLane.length = 0;
   isPaused = false;
   blinkCount = 0;
+  score=0;
+  bestScore = Math.max(score, bestScore);
   typewriter.reset();
   retryButton.visible=false;
 }
@@ -454,12 +471,22 @@ document.addEventListener('DOMContentLoaded', function() {
   game.addEventListener('touchstart', handleResume);
 });
 
+const scorePerSecond=11;
+const perSecondFactor = 1/1000;
+function updateScore(){
+  score += deltaTime*scorePerSecond*perSecondFactor;
+}
+
 function gameLoop(){
   runControls();
 
   if(!isPaused){
     updateEnemies();
     updatePlayer();
+
+    if(!movementBlock){
+      updateScore();
+    }
   }
   displayGameEntities();
   drawHUD();

@@ -350,12 +350,15 @@ function render(){
 }
 
 function showFPS(){
+  if(!isFPSshowed) return;
+  
   ctx.save();
   ctx.font = 'bold 20px monospace';
+  ctx.textAlign = "left";
   ctx.fillStyle = TEXT_LIGHT;
   ctx.shadowColor = 'black';
   ctx.shadowBlur = 4;
-  ctx.fillText(`FPS: ${fps}`, w-50, 25);
+  ctx.fillText(`FPS: ${fps}`, w-90, 12);
   ctx.restore();
 }
 

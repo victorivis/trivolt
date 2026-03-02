@@ -4,6 +4,7 @@ let timeNow = performance.now();
 let lastFpsUpdate = performance.now();
 const expectedTime = 1000/FPS;
 const speedFactor = 50/1000;
+let isFPSshowed = false;
 
 //const FOREGROUND = "#0e900e";
 //const TEXT = "#00ca00ff";
